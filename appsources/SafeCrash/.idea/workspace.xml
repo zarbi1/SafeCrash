@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9be6a43f-22c4-47bf-88c3-58b74c4d7cdc" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.vscode/plugins.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/plugins.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="1rnZrY4XZdcC6whYOfvkVNHOXx0" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9be6a43f-22c4-47bf-88c3-58b74c4d7cdc" name="Default Changelist" comment="" />
+      <created>1619614015053</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1619614015053</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="470" y="105" key="SettingsEditor" timestamp="1619615104708">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="470" y="105" key="SettingsEditor/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619615104708" />
+    <state x="632" y="199" width="672" height="678" key="search.everywhere.popup" timestamp="1619614526560">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="632" y="199" width="672" height="678" key="search.everywhere.popup/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619614526560" />
+  </component>
+</project>
