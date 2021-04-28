@@ -16,7 +16,8 @@ By Hadrien Casadesus
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        -->
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
@@ -32,15 +33,19 @@ By Hadrien Casadesus
             <p>The little thing that can save your life</p>
         </div>
         <div class="box">
-            <a href="./pages/emergency-contacts.html" class="btn btn-white btn-animation-1">Add Emergency Contacts</a> 
+            <a href="#" onclick="addContacts()" class="btn btn-white btn-animation-1">Add Emergency Contacts</a> 
         </div>
         <div class="em-contact-title">
-            <p> Emergency Contacts:</p>
+            <p id="printtest">Emergency Contacts:</p>
         </div>
         <div class="em-contact-list" id="em-contact-list">
             <ul class="list" id="em-list">
 
             </ul>
+        </div>
+
+        <div id="CONSOLEContainer">
+            <p id="console"></p>
         </div>
 
         <footer><p>Made in 🇫🇷 with ❤️ <br>By Hadrien Casadesus</p></footer>
