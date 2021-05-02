@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="INFO:CONSOLE" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="verbose" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -20,8 +25,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9be6a43f-22c4-47bf-88c3-58b74c4d7cdc" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/www/js/db/pouchdb.cordova-sqlite.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/www/js/db/pouchdb.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/www/js/db/pouchdb.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/safecrash.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/safecrash.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/plugins.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/plugins.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/www/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/js/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,12 +46,15 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="ProjectId" id="1rnZrY4XZdcC6whYOfvkVNHOXx0" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
@@ -69,27 +86,32 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1619978559743">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619978559743" />
-    <state x="92" y="92" width="2376" height="1216" key="AVDManager" timestamp="1619978717563">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state x="2553" y="359" width="1932" height="1045" key="AVDManager" timestamp="1619982926022">
+      <screen x="2560" y="357" width="1920" height="1040" />
     </state>
     <state x="92" y="92" width="2376" height="1216" key="AVDManager/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619978717563" />
-    <state x="749" y="215" key="FileChooserDialogImpl" timestamp="1619978395385">
+    <state x="2553" y="359" width="1932" height="1045" key="AVDManager/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@2560.357.1920.1040" timestamp="1619982926022" />
+    <state x="749" y="215" key="FileChooserDialogImpl" timestamp="1619983389138">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="749" y="215" key="FileChooserDialogImpl/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619978395385" />
-    <state x="470" y="105" key="SettingsEditor" timestamp="1619978779659">
+    <state x="749" y="215" key="FileChooserDialogImpl/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619983389138" />
+    <state x="470" y="105" key="SettingsEditor" timestamp="1619983033124">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="470" y="105" key="SettingsEditor/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619978779659" />
-    <state x="632" y="199" width="672" height="678" key="search.everywhere.popup" timestamp="1619978756809">
+    <state x="470" y="105" key="SettingsEditor/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619983033124" />
+    <state x="632" y="199" width="672" height="678" key="search.everywhere.popup" timestamp="1619983027718">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="632" y="199" width="672" height="678" key="search.everywhere.popup/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619978756809" />
+    <state x="632" y="199" width="672" height="678" key="search.everywhere.popup/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619983027718" />
   </component>
 </project>

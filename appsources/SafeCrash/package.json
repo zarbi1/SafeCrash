@@ -33,7 +33,10 @@
       "cordova-plugin-dialogs": {},
       "cordova-plugin-vibration": {},
       "cordova-plugin-local-notification": {},
-      "cordova-plugin-console": {}
+      "cordova-plugin-console": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-file": {},
+      "cordova-plugin-sqlite-2": {}
     },
     "platforms": [
       "ios",
@@ -41,6 +44,9 @@
     ]
   },
   "dependencies": {
-    "pouchdb": "^7.2.2"
+    "cordova-plugin-file": "6.0.2",
+    "cordova-plugin-sqlite-2": "1.0.6",
+    "pouchdb": "^7.2.2",
+    "pouchdb-adapter-cordova-sqlite": "^2.0.8"
   }
 }
