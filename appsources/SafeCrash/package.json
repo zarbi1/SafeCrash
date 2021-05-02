@@ -16,6 +16,7 @@
     "cordova-android": "^9.1.0",
     "cordova-ios": "^6.2.0",
     "cordova-plugin-badge": "^0.8.8",
+    "cordova-plugin-console": "^1.1.0",
     "cordova-plugin-contacts": "^3.0.1",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-dialogs": "^2.0.2",
@@ -31,11 +32,15 @@
       "cordova-plugin-contacts": {},
       "cordova-plugin-dialogs": {},
       "cordova-plugin-vibration": {},
-      "cordova-plugin-local-notification": {}
+      "cordova-plugin-local-notification": {},
+      "cordova-plugin-console": {}
     },
     "platforms": [
       "ios",
       "android"
     ]
+  },
+  "dependencies": {
+    "pouchdb": "^7.2.2"
   }
 }
