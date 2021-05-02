@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="9be6a43f-22c4-47bf-88c3-58b74c4d7cdc" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.vscode/plugins.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/plugins.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +42,8 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="dart.analysis.tool.window.visible" value="false" />
-    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Android Logcat" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="SvnConfiguration">
@@ -40,14 +59,37 @@
     </task>
     <servers />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="WindowStateProjectService">
-    <state x="470" y="105" key="SettingsEditor" timestamp="1619615104708">
+    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1619978559743">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="470" y="105" key="SettingsEditor/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619615104708" />
-    <state x="632" y="199" width="672" height="678" key="search.everywhere.popup" timestamp="1619614526560">
+    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619978559743" />
+    <state x="92" y="92" width="2376" height="1216" key="AVDManager" timestamp="1619978717563">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="632" y="199" width="672" height="678" key="search.everywhere.popup/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619614526560" />
+    <state x="92" y="92" width="2376" height="1216" key="AVDManager/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619978717563" />
+    <state x="749" y="215" key="FileChooserDialogImpl" timestamp="1619978395385">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="749" y="215" key="FileChooserDialogImpl/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619978395385" />
+    <state x="470" y="105" key="SettingsEditor" timestamp="1619978779659">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="470" y="105" key="SettingsEditor/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619978779659" />
+    <state x="632" y="199" width="672" height="678" key="search.everywhere.popup" timestamp="1619978756809">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="632" y="199" width="672" height="678" key="search.everywhere.popup/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619978756809" />
   </component>
 </project>
