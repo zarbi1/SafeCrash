@@ -26,17 +26,22 @@ By Hadrien Casadesus
         <title>SafeCrash | Home</title>
     </head>
     <body onload="onloadJS()">  
-        <div>
-            <h1 class="title">SafeCrash</h1>
-        </div>
+        
+        <h1 class="title-Crash-General"><a class="title-Safe">Safe</a>Crash</h1>
+        
         <div class="subtitle">
             <p>The little thing that can save your life</p>
         </div>
-        <div class="box">
-            <a href="#" onclick="addContacts()" class="btn btn-white btn-animation-1">Add Emergency Contacts</a> 
+        <div class="boxforbtn">
+            <button class="infobtn" onclick="infonotification()">HELP</button>
         </div>
+        <br><br><br>
+        <div class="box">
+            <button onclick="addContacts()" class="addbtn">Add Emergency Contacts</button>
+        </div>
+        <br>
         <div class="em-contact-title">
-            <p id="printtest">Emergency Contacts:</p>
+            <p id="printtest">Emergency Contacts List:</p>
         </div>
         <div class="em-contact-list" id="em-contact-list">
         </div>
@@ -45,7 +50,7 @@ By Hadrien Casadesus
             <p id="console"></p>
         </div>
 
-        <footer><p>Made in 🇫🇷 with ❤️ <br>By Hadrien Casadesus</p></footer>
+        <footer class="footer"><p>Made in 🇫🇷 with ❤️ <br>By Hadrien Casadesus</p></footer>
         <script src="cordova.js"></script>
         <script src="js/db/pouchdb.js"></script>
         <script src="js/db/pouchdb.cordova-sqlite.js"></script>

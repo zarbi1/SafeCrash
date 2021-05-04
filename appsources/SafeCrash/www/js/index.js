@@ -3,6 +3,29 @@ let db = new PouchDB('myDB.db', {adapter: 'cordova-sqlite'});
 let contactlist = document.getElementById('em-contact-list');
 
 
+
+document.addEventListener('deviceready', onDeviceReady, true)
+function onDeviceReady (){
+    console.log('Device is Ready SafeCrash Starting...')
+
+    //cordova.plugins.foregroundService.start('GPS Running', 'Background Service');
+    cordova.plugins.backgroundMode.enable(); //enable background mod
+
+    cordova.plugins.notification.local.schedule({
+        title: 'My first notification',
+        text: 'Thats pretty easy...',
+        foreground: true
+    });
+    
+
+    cordova.plugins.backgroundMode.on('enable', () =>{
+        console.log('background enabled');
+    });
+}
+
+
+
+
 function addContacts(){
     navigator.contacts.pickContact( (contact) =>{
         let contactSet = {
@@ -25,16 +48,6 @@ function addContacts(){
 
         
     })
-    /*
-     //NOTIFACTION
-    navigator.notification.alert(
-        'You are the winner!',  // message
-        alertDismissed,         // callback
-        'Game Over',            // title
-        'Done'                  // buttonName
-    );
-    */
-   //Access to all "document" in the databse
     
    
 }      
@@ -42,11 +55,7 @@ function addContacts(){
 
 
 
-document.addEventListener('deviceready', onDeviceReady, true)
-function onDeviceReady (){
-    console.log('Device is Ready SafeCrash Starting...')
 
-}
 
 function onloadJS() {
     
@@ -81,8 +90,8 @@ function onloadJS() {
                 phoneNumStr = phoneNumStr.replace(/-/g, "");
 
                 //Inner HTML
-                phoneNum.innerHTML = phoneNumStr;
-                contactName.innerHTML = result.rows[e].doc.name;
+                phoneNum.innerHTML = "Phone Number: " + "<strong>"+ phoneNumStr + "</strong>";
+                contactName.innerHTML = "Contact Name: " + "<strong>" + result.rows[e].doc.name+ "</strong>";
                 deleteButton.innerHTML ='Delete';
 
 
@@ -109,4 +118,17 @@ function deleteContact(contactID) {
         }) 
     })
     console.log('I need to delete the contact id: ', contactID)
+}
+
+function infonotification() {
+    navigator.notification.alert(
+        'To correctly use SafeCrash you need to add emergency contacts, they will be automaticly contacted if you have an accident',  // message
+        alertDismissed,         // callback
+        'Help',           // title
+        'Ok !'                  // buttonName
+    );
+
+    function alertDismissed(){
+        //do nothing be must be here
+    }
 }

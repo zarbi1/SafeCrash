@@ -1,0 +1,184 @@
+/*TOP*/
+body{
+    font-family: 'Noto Sans', sans-serif;
+    background-color: #303841;
+    color: #eeeeee;
+}
+.title-Crash-General{
+    text-align: center;
+    color: red;
+}
+.title-Safe{
+    color: green;
+}
+.subtitle{
+    text-align: center;
+}
+/* info btn*/
+.infobtn {
+    
+    text-align: center;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-size: 1em;
+    position: absolute;
+    background-color: green;
+    border: none;
+    color: #fff;
+    padding: 1px;
+    width:  50px;
+    height: 45px;
+    transition-duration: 0.4s;
+    overflow: hidden;
+    box-shadow: 0 5px 15px #193047;
+    border-radius: 25%;
+  }
+  
+  .infobtn:hover {
+    background: rgb(255, 255, 255);
+    box-shadow: 0px 2px 10px 5px green;
+    color: #000;
+  }
+  
+  .infobtn:after {
+    content: "";
+    background: green;
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px !important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s
+  }
+  
+  .infobtn:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+  }
+  
+  .infobtn:focus { outline:0; }
+
+
+/* Add Contact Button*/
+.addbtn {
+    margin-left: 6%;
+    text-align: center;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-size: 15px;
+    letter-spacing: 4px;
+    position: relative;
+    background-color: #0c19da;
+    border: none;
+    color: #fff;
+    padding: 10px;
+    width: 300px;
+    text-align: center;
+    transition-duration: 0.4s;
+    overflow: hidden;
+    box-shadow: 0 5px 15px #193047;
+    border-radius: 10px;
+  }
+  
+  .addbtn:hover {
+    background: rgb(255, 255, 255);
+    box-shadow: 0px 2px 10px 5px #0c19da;
+    color: #000;
+  }
+  
+  .addbtn:after {
+    content: "";
+    background: #0c19da;
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px !important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s
+  }
+  
+  .addbtn:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+  }
+  
+  .addbtn:focus { outline:0; }
+
+/* Contact Container*/
+
+
+
+
+
+/* Delete Button*/
+.button {
+    text-align: center;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-size: 15px;
+    letter-spacing: 4px;
+    position: relative;
+    background-color: #d72323;
+    border: none;
+    color: #fff;
+    padding: 10px;
+    width: 100px;
+    text-align: center;
+    transition-duration: 0.4s;
+    overflow: hidden;
+    box-shadow: 0 5px 15px #193047;
+    border-radius: 10px;
+  }
+  
+  .button:hover {
+    background: rgb(255, 255, 255);
+    box-shadow: 0px 2px 10px 5px #d72323;
+    color: #000;
+  }
+  
+  .button:after {
+    content: "";
+    background: #d72323;
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px !important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s
+  }
+  
+  .button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+  }
+  
+  .button:focus { outline:0; }
+
+
+  /*Contact Container*/
+  .contactContainer{
+    border:1px solid red;
+    border-radius: 15px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+  }
+
+  .footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+  }
