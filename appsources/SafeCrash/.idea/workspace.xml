@@ -25,16 +25,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9be6a43f-22c4-47bf-88c3-58b74c4d7cdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/www/js/db/pouchdb.cordova-sqlite.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/www/js/db/pouchdb.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/www/js/db/pouchdb.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/safecrash.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/safecrash.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/www/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/www/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/js/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -105,6 +98,22 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="749" y="215" key="FileChooserDialogImpl/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1619983389138" />
+    <state width="1860" height="639" key="GridCell.Tab.0.bottom" timestamp="1620247563047">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1860" height="639" key="GridCell.Tab.0.bottom/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1620247563047" />
+    <state width="1860" height="639" key="GridCell.Tab.0.center" timestamp="1620247563047">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1860" height="639" key="GridCell.Tab.0.center/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1620247563047" />
+    <state width="1860" height="639" key="GridCell.Tab.0.left" timestamp="1620247563047">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1860" height="639" key="GridCell.Tab.0.left/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1620247563047" />
+    <state width="1860" height="639" key="GridCell.Tab.0.right" timestamp="1620247563047">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1860" height="639" key="GridCell.Tab.0.right/2560.357.1920.1040/-1920.330.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1620247563047" />
     <state x="470" y="105" key="SettingsEditor" timestamp="1619983033124">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>

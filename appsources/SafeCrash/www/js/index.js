@@ -15,16 +15,36 @@ function onDeviceReady (){
     //cordova.plugins.foregroundService.start('SafeCrash Runing', 'Background Service');
     cordova.plugins.backgroundMode.enable(); //enable background mod
     cordova.plugins.backgroundMode.on('enable', () =>{
-        console.log('background enabled');
+       console.log('background enabled');
     });
 
     bleEn(); //check if ble is enabled
     //ble.scan([], 1, success, failure);
 
     autoconnect()
+    cordova.plugins.autoStart.enable();
 
+    cordova.plugins.backgroundMode.isIgnoringBatteryOptimizations((isIgnoring) =>{
+        if(isIgnoring){
+            console.log(isIgnoring)
+        }else{
+
+        }
+    })
 }
 let limiter = 0;
+
+
+//EVENTS
+
+
+
+
+
+
+
+
+
 
 async function getDeviceID() {
     let get = new Promise((res, rej) => {
@@ -325,4 +345,10 @@ function SendMessages(phoneNumber) {
     let sucess = () => {console.log("SMS sent !")};
     let error = (err) => {console.log('Error' + err)};
     sms.send(phoneNumber, message, intent, sucess, error);
+}
+
+
+//will be added soon
+function alarm() {
+    
 }
