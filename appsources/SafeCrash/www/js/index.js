@@ -437,12 +437,40 @@ function infonotification() {
 
 //will be added soon
 function alarm() {
-    let alarmSound = new Media("media/annoying-alarm.mp3", ()=>{
-        console.log('sucess')
-    }, (err)=>{
-        console.log(err)
-    })
-    alarmSound.play({numberOfLoops: 999}) //we need to be shure that the sound wont stop util we say it so I've put a big amount of loop
+    let sound = {
+        track: {
+            src: 'file:///android_asset/www/media/annoying-alarm.mp3',
+            title: 'Fight Club Rules',
+            volume: 30 //set to max volume
+        },
+        media:null,
+        status:{
+            '0':'MEDIA_NONE',
+            '1':'MEDIA_STARTING',
+            '2':'MEDIA_RUNNING',
+            '3':'MEDIA_PAUSED',
+            '4':'MEDIA_STOPPED'
+        },
+        err:{
+            '1':'MEDIA_ERR_ABORTED',
+            '2':'MEDIA_ERR_NETWORK',
+            '3':'MEDIA_ERR_DECODE',
+            '4':'MEDIA_ERR_NONE_SUPPORTED'
+        }
+    }
+
+    let src = sound.track.src;
+    sound.media = new Media(src, ()=>{
+        console.log('sound played succesfully')
+    }, (err) => {
+        console.warn('SafeCrash Failure');
+        console.log(err);
+    }, (statechange) => {
+        console.log('media status is now ' + sound.status[status] );
+    });
+
+
+    sound.media.play() //we need to be shure that the sound wont stop util we say it so I've put a big amount of loop
     bigdiv.style.display = "none";// we need to hide everything extept the alarm
     alarmdiv.style.display = "contents"//displaying the alarm
 
@@ -513,17 +541,17 @@ function alarm() {
             Crash(); //calling the crash function
             bigdiv.style.display = "contents";// showing the page after countdown
             alarmdiv.style.display = "none"//hidding the alarm
-            alarmSound.stop()
+            sound.media.stop()
             timeLeft =0; //setting time left to 0 beacuse if the timer is at 10 sec remaining it will excature Crash() 11 times
 
         }else if(doNotCall){
-            alarmSound.stop()
+            sound.media.stop()
             bigdiv.style.display = "contents";// showing the page after countdown
             alarmdiv.style.display = "none"//hidding the alarm
         }
 
         if (timeLeft === 0) {
-            alarmSound.stop()
+            sound.media.stop()
             onTimesUp();
             
         }
