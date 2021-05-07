@@ -1,42 +1,145 @@
 
 
 
-let db = new PouchDB('SafeCrashDB.db', {adapter: 'cordova-sqlite'});
-let deviceDB = new PouchDB('DeviceDB.db', {adapter: 'cordova-sqlite'});
+const db = new PouchDB('SafeCrashDB.db', {adapter: 'cordova-sqlite'});
+const deviceDB = new PouchDB('DeviceDB.db', {adapter: 'cordova-sqlite'});
+
 let contactlist = document.getElementById('em-contact-list');
 let boundState= document.getElementById('boundState');
 let boundBtn = document.getElementById('bound-btn');
 
 
+
 document.addEventListener('deviceready', onDeviceReady, true)
 function onDeviceReady (){
     console.log('Device is Ready SafeCrash Starting...')
+    const permissions = cordova.plugins.permissions;
 
-    //cordova.plugins.foregroundService.start('SafeCrash Runing', 'Background Service');
+
+
+
+
+
+    //Check app Permissions
+    const permissionlist= [ //Add new permissions here
+        permissions.READ_CONTACTS,
+        permissions.VIBRATE,
+        permissions.RECEIVE_BOOT_COMPLETED,
+        permissions.SEND_SMS,
+        permissions.BLUETOOTH,
+        permissions.BLUETOOTH_ADMIN,
+        permissions.FOREGROUND_SERVICE,
+        permissions.FOREGROUND_SERVICE,
+        permissions.WAKE_LOCK,
+        permissions.WRITE_EXTERNAL_STORAGE,
+        permissions.ACCESS_COARSE_LOCATION,
+        permissions.ACCESS_FINE_LOCATION,
+        permissions.ACCESS_BACKGROUND_LOCATION,
+        permissions.SYSTEM_ALERT_WINDOW 
+    ]
+
+
+    permissions.checkPermission(permissionlist, (sucess)=>{
+        if (!sucess.hasPermission){
+            permissions.requestPermissions(
+                permissionlist,
+                (state)=>{
+                    if (!state.hasPermission) console.log(state);
+                }, (err) =>{
+                    console.log(err);
+                }
+            )
+        };
+        console.log('permission1 ok!');
+    }, ()=>{
+
+    });
+    cordova.plugins.backgroundMode.requestForegroundPermission();
+
+
+
+
+
+
+    //BackGround
     cordova.plugins.backgroundMode.enable(); //enable background mod
     cordova.plugins.backgroundMode.on('enable', () =>{
        console.log('background enabled');
     });
 
-    bleEn(); //check if ble is enabled
-    //ble.scan([], 1, success, failure);
 
-    autoconnect()
-    cordova.plugins.autoStart.enable();
+    cordova.plugins.backgroundMode.on('activate', function() {
+        cordova.plugins.backgroundMode.disableWebViewOptimizations();
+        cordova.plugins.backgroundMode.excludeFromTaskList();
+    }); 
+
+    cordova.plugins.backgroundMode.setDefaults({
+        title: 'SafeCrash Runnig in background',
+        text: 'Trying to determine if you are alive or not',
+        subText: '', // see https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#setSubText(java.lang.CharSequence)
+        icon: 'icon', // this will look for icon.png in platforms/android/res/drawable|mipmap
+        color: undefined, // hex format like 'F14F4D'
+        resume: false,
+        hidden: false,
+        bigText: false,
+        channelName: 'SafeCrash App', // Shown when the user views the app's notification settings
+        channelDescription: "SafeCrash App can save your life consider contributing to it's git", // Shown when the user views the channel's settings
+        allowClose: false, // add a "Close" action to the notification
+        closeIcon: 'power', // An icon shown for the close action
+        closeTitle: 'Close', // The text for the close action
+        showWhen: false, //(Default: true) Show the time since the notification was created
+        visibility: 'public', // Android only: one of 'private' (default), 'public' or 'secret' (see https://developer.android.com/reference/android/app/Notification.Builder.html#setVisibility(int))
+    })
 
     cordova.plugins.backgroundMode.isIgnoringBatteryOptimizations((isIgnoring) =>{
         if(isIgnoring){
-            console.log(isIgnoring)
+            console.log('batterie optimisation is ignored.')
         }else{
-
+            navigator.notification.alert(
+                "To correctly use SafeCrash you need to allow the app to ignore battery opimization if you didn't allowed it please restart the app and allow it.",  // message
+                alertDismissed,         // callback
+                'Info',           // title
+                'Ok !'                  // buttonName
+            );
+        
+            function alertDismissed(){
+                //do nothing be must be here
+            }
+            cordova.plugins.backgroundMode.disableBatteryOptimizations();
         }
     })
+
+
+    //GPS
+
+
+
+
+
+
+
+    //BLE
+    bleEn(); //check if ble is enabled
+    autoconnect()//auto connect to the safecrash device
+
+
+
+
+
+
+
+    //Autostart | I dont know if it's working
+    cordova.plugins.autoStart.enable();
+
+    
+
+
 }
 let limiter = 0;
 
 
 //EVENTS
-
+//to prevent gps to stop working
 
 
 
@@ -76,18 +179,19 @@ async function autoconnect(){
                 console.log("bug detected it's not a crash")
             }else{
 
-                //Crash detected
+                //CRASH DETECTED WE NEED TO SEND SMS
                 console.log('connected to:', device )
                 console.log('crash detected')
                 db.allDocs({
                     include_docs: true,
                     attachments: true
                 }).then( (result) =>{
+
                     for (let x = 0; x < result.rows.length; x++) {
                         let phoneNumStrMsg= result.rows[x].doc.phone;
                         phoneNumStrMsg = phoneNumStrMsg.replace(/-/g, "");
                         console.log('sendding msg to:', result.rows[x].doc.name);
-                        SendMessages(phoneNumStrMsg); //Send a message to all registred contacts
+                        getCoordinateAndSendMessage(phoneNumStrMsg); //Send a message to all registred contacts
                     }
                     
                 }).catch( (err) => {
@@ -138,7 +242,7 @@ function checkBound() {
     ble.bondedDevices((conectedDevices) =>{
         console.log('Bounded devices: ', conectedDevices);
         for (let z = 0; z < conectedDevices.length; z++) {
-            if (conectedDevices[z].name == "Boom Shakalaka") { //NEED TO CHANGE THE NAME WHEN ARDUINO CODE IS FINISHED
+            if (conectedDevices[z].name == "Boom Shakalaka" || conectedDevices[z].name == "LE-Boom Shakalaka") { //NEED TO CHANGE THE NAME WHEN ARDUINO CODE IS FINISHED
 
 
                 //Saving the device in internal db
@@ -240,12 +344,7 @@ async function Bound() {
     limiter = 1;
     ble.showBluetoothSettings((checkDevice) => {
         console.log(checkDevice);
-        navigator.notification.alert(
-            'SafeCrash if you correctly bounded your SafeCrashBox please restart the app',  // message
-            alertDismissed,         // callback
-            'Info',           // title
-            'Ok !'                  // buttonName
-        );
+        location.reload(); 
     }, (error) => {
         console.log(error)
     });
@@ -305,6 +404,9 @@ function onloadJS() {
 
 }
 
+
+
+//DELETE BUTTON
 function deleteContact(contactID) {
     
     db.get(contactID).then( (doc) =>{ //doc is the result of the db.get(_id)
@@ -314,6 +416,9 @@ function deleteContact(contactID) {
     })
 }
 
+
+
+//HELP BUTTON
 function infonotification() {
     navigator.notification.alert(
         'To correctly use SafeCrash you need to add emergency contacts, they will be automaticly contacted if you have an accident',  // message
@@ -330,22 +435,48 @@ function infonotification() {
 
 
 
-//send messages
-function SendMessages(phoneNumber) {
-    let message = "SafeCrash Test SMS"
-    let options= {
-        replaceLineBreaks: false, // true to replace \n by a new line, false by default
-            android: {
-                intent: 'INTENT'  // send SMS with the native android SMS messaging
-                //intent: '' // send SMS without opening any other app, require : android.permission.SEND_SMS and android.permission.READ_PHONE_STATE
-            }
 
-    };
-    let intent = '';
-    let sucess = () => {console.log("SMS sent !")};
-    let error = (err) => {console.log('Error' + err)};
-    sms.send(phoneNumber, message, intent, sucess, error);
+//Send message and get position
+async function getCoordinateAndSendMessage(phoneNumber) {
+   let get = new Promise((res, rej) =>{
+        navigator.geolocation.getCurrentPosition((position) => {
+
+            var coordinates = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            }
+            this.coordinates = coordinates;
+            res(coordinates);
+        }, (err) =>{
+            console.log('error: ', err)
+            res(err)
+        }, { timeout: 30000, maximumAge: 2000, enableHighAccuracy: true });
+   }) 
+
+   get.then(() =>{
+        let msgCoordinate = this.coordinates
+        
+        let latitude = msgCoordinate.latitude;
+        let longitude = msgCoordinate.longitude;
+
+        let message = "🚨I had an accident !!!💥 \n Please come help me these are my coordinates: \n 🛰️🛰️Latitude: " + latitude + "\n 🛰️Longitude: " + longitude  + "\n🌐Easy link: https://www.google.com/maps/search/?api=1&query="+ latitude + ","+longitude +"\n This message have been sent automaticly using SafeCrash 🚙"
+        let options= {
+            replaceLineBreaks: true, // true to replace \n by a new line
+                android: {
+                    intent: 'INTENT'  // send SMS with the native android SMS messaging
+                    //intent: '' // send SMS without opening any other app, require : android.permission.SEND_SMS and android.permission.READ_PHONE_STATE
+                }
+
+        };
+        let intent = '';
+        let sucess = () => {console.log("SMS sent !")};
+        let error = (err) => {console.log('Error' + err)};
+        sms.send(phoneNumber, message, intent, sucess, error);
+        
+   })
+   return await get;
 }
+
 
 
 //will be added soon
