@@ -470,7 +470,7 @@ function alarm() {
     });
 
 
-    sound.media.play() //we need to be shure that the sound wont stop util we say it so I've put a big amount of loop
+    
     bigdiv.style.display = "none";// we need to hide everything extept the alarm
     alarmdiv.style.display = "contents"//displaying the alarm
 
@@ -527,35 +527,36 @@ function alarm() {
     
 
     function startTimer() {
-    timerInterval = setInterval(() => {
-        timePassed = timePassed += 1;
-        timeLeft = TIME_LIMIT - timePassed;
-        document.getElementById("base-timer-label").innerHTML = formatTime(
-        timeLeft
-        );
-        setCircleDasharray();
-        setRemainingPathColor(timeLeft);
+        sound.media.play() //we need to be shure that the sound wont stop util we say it so I've put a big amount of loop
+        timerInterval = setInterval(() => {
+            timePassed = timePassed += 1;
+            timeLeft = TIME_LIMIT - timePassed;
+            document.getElementById("base-timer-label").innerHTML = formatTime(
+            timeLeft
+            );
+            setCircleDasharray();
+            setRemainingPathColor(timeLeft);
 
-        //Emergency Buttons
-        if (callNow) { //Call now btn have been pressed
-            Crash(); //calling the crash function
-            bigdiv.style.display = "contents";// showing the page after countdown
-            alarmdiv.style.display = "none"//hidding the alarm
-            sound.media.stop()
-            timeLeft =0; //setting time left to 0 beacuse if the timer is at 10 sec remaining it will excature Crash() 11 times
+            //Emergency Buttons
+            if (callNow) { //Call now btn have been pressed
+                Crash(); //calling the crash function
+                bigdiv.style.display = "contents";// showing the page after countdown
+                alarmdiv.style.display = "none"//hidding the alarm
+                sound.media.stop()
+                timeLeft =0; //setting time left to 0 beacuse if the timer is at 10 sec remaining it will excature Crash() 11 times
 
-        }else if(doNotCall){
-            sound.media.stop()
-            bigdiv.style.display = "contents";// showing the page after countdown
-            alarmdiv.style.display = "none"//hidding the alarm
-        }
+            }else if(doNotCall){
+                sound.media.stop()
+                bigdiv.style.display = "contents";// showing the page after countdown
+                alarmdiv.style.display = "none"//hidding the alarm
+            }
 
-        if (timeLeft === 0) {
-            sound.media.stop()
-            onTimesUp();
-            
-        }
-    }, 1000);
+            if (timeLeft === 0) {
+                sound.media.stop()
+                onTimesUp();
+                
+            }
+        }, 1000);
     }
 
 
