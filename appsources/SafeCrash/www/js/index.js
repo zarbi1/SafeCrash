@@ -7,7 +7,17 @@ const deviceDB = new PouchDB('DeviceDB.db', {adapter: 'cordova-sqlite'});
 let contactlist = document.getElementById('em-contact-list');
 let boundState= document.getElementById('boundState');
 let boundBtn = document.getElementById('bound-btn');
-
+let bigdiv = document.getElementById('globalDiv');
+let alarmdiv = document.getElementById('alarm');
+let smsState = document.getElementById('smsstatepara');
+let callNow = false
+let doCall = false
+let callNowBtn = document.getElementById('callNow').addEventListener('click', ()=>{
+    callNow = true;
+});
+let doNotCall = document.getElementById('doNotCall').addEventListener('click', ()=>{
+    doNotCall = true;
+});
 
 
 document.addEventListener('deviceready', onDeviceReady, true)
@@ -182,21 +192,8 @@ async function autoconnect(){
                 //CRASH DETECTED WE NEED TO SEND SMS
                 console.log('connected to:', device )
                 console.log('crash detected')
-                db.allDocs({
-                    include_docs: true,
-                    attachments: true
-                }).then( (result) =>{
-
-                    for (let x = 0; x < result.rows.length; x++) {
-                        let phoneNumStrMsg= result.rows[x].doc.phone;
-                        phoneNumStrMsg = phoneNumStrMsg.replace(/-/g, "");
-                        console.log('sendding msg to:', result.rows[x].doc.name);
-                        getCoordinateAndSendMessage(phoneNumStrMsg); //Send a message to all registred contacts
-                    }
-                    
-                }).catch( (err) => {
-                    console.log(err);
-                });
+                cordova.plugins.backgroundMode.unlock();
+                alarm();
 
             }
 
@@ -279,8 +276,9 @@ function checkBound() {
 
                 //When the arduino code will be finished I will add a function to check if safeCrash is in bound mode or not
                 console.log('Bounded !')
-                boundBtn.style.display = "none"; //no need to display the bound btn if safecrash is bounded
-                boundState.innerHTML="SafeCrash Bounded !"
+                boundState.innerHTML="SafeCrash Bounded ! If you want you can rebound SafeCrash"
+                boundBtn.innerHTML="ReBound"
+                boundBtn.style.display = "initial"; 
                 bounded =true;
                  //To prevent a bug where SafeCrash is activating the crash mod only if it's the first time that the device is bouded
             }
@@ -315,9 +313,9 @@ function bleEn() {
                 //show or hide bound button
                 checkBound() //Ble enabled so we need to check if SafeCrash is connected or not.
                 if (bounded) {
-                    boundBtn.style.display = "none";
-                    boundState.innerHTML="SafeCrash Bounded !"
-                    
+                    boundState.innerHTML="SafeCrash Bounded ! If you want you can rebound SafeCrash"
+                    boundBtn.innerHTML="ReBound"
+                    boundBtn.style.display = "initial"; 
                 }else{
                     boundBtn.style.display = "initial"; 
                 }
@@ -436,50 +434,273 @@ function infonotification() {
 
 
 
-//Send message and get position
-async function getCoordinateAndSendMessage(phoneNumber) {
-   let get = new Promise((res, rej) =>{
-        navigator.geolocation.getCurrentPosition((position) => {
-
-            var coordinates = {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude
-            }
-            this.coordinates = coordinates;
-            res(coordinates);
-        }, (err) =>{
-            console.log('error: ', err)
-            res(err)
-        }, { timeout: 30000, maximumAge: 2000, enableHighAccuracy: true });
-   }) 
-
-   get.then(() =>{
-        let msgCoordinate = this.coordinates
-        
-        let latitude = msgCoordinate.latitude;
-        let longitude = msgCoordinate.longitude;
-
-        let message = "🚨I had an accident !!!💥 \n Please come help me these are my coordinates: \n 🛰️🛰️Latitude: " + latitude + "\n 🛰️Longitude: " + longitude  + "\n🌐Easy link: https://www.google.com/maps/search/?api=1&query="+ latitude + ","+longitude +"\n This message have been sent automaticly using SafeCrash 🚙"
-        let options= {
-            replaceLineBreaks: true, // true to replace \n by a new line
-                android: {
-                    intent: 'INTENT'  // send SMS with the native android SMS messaging
-                    //intent: '' // send SMS without opening any other app, require : android.permission.SEND_SMS and android.permission.READ_PHONE_STATE
-                }
-
-        };
-        let intent = '';
-        let sucess = () => {console.log("SMS sent !")};
-        let error = (err) => {console.log('Error' + err)};
-        sms.send(phoneNumber, message, intent, sucess, error);
-        
-   })
-   return await get;
-}
-
-
 
 //will be added soon
 function alarm() {
+    let alarmSound = new Media("media/annoying-alarm.mp3", ()=>{
+        console.log('sucess')
+    }, (err)=>{
+        console.log(err)
+    })
+    alarmSound.play({numberOfLoops: 999}) //we need to be shure that the sound wont stop util we say it so I've put a big amount of loop
+    bigdiv.style.display = "none";// we need to hide everything extept the alarm
+    alarmdiv.style.display = "contents"//displaying the alarm
+
+    const FULL_DASH_ARRAY = 283;
+    const WARNING_THRESHOLD = 10;
+    const ALERT_THRESHOLD = 5;
+
+    const COLOR_CODES = {
+    info: {
+        color: "green"
+    },
+    warning: {
+        color: "orange",
+        threshold: WARNING_THRESHOLD
+    },
+    alert: {
+        color: "red",
+        threshold: ALERT_THRESHOLD
+    }
+    };
+
+    const TIME_LIMIT = 15;
+    let timePassed = 0;
+    let timeLeft = TIME_LIMIT;
+    let timerInterval = null;
+    let remainingPathColor = COLOR_CODES.info.color;
+
+    document.getElementById("countdown").innerHTML = `
+    <div class="base-timer">
+    <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <g class="base-timer__circle">
+        <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
+        <path
+            id="base-timer-path-remaining"
+            stroke-dasharray="283"
+            class="base-timer__path-remaining ${remainingPathColor}"
+            d="
+            M 50, 50
+            m -45, 0
+            a 45,45 0 1,0 90,0
+            a 45,45 0 1,0 -90,0
+            "
+        ></path>
+        </g>
+    </svg>
+    <span id="base-timer-label" class="base-timer__label">${formatTime(
+        timeLeft
+    )}</span>
+    </div>
+    `;
+
+    startTimer();
+
     
+
+    function startTimer() {
+    timerInterval = setInterval(() => {
+        timePassed = timePassed += 1;
+        timeLeft = TIME_LIMIT - timePassed;
+        document.getElementById("base-timer-label").innerHTML = formatTime(
+        timeLeft
+        );
+        setCircleDasharray();
+        setRemainingPathColor(timeLeft);
+
+        //Emergency Buttons
+        if (callNow) { //Call now btn have been pressed
+            Crash(); //calling the crash function
+            bigdiv.style.display = "contents";// showing the page after countdown
+            alarmdiv.style.display = "none"//hidding the alarm
+            alarmSound.stop()
+            timeLeft =0; //setting time left to 0 beacuse if the timer is at 10 sec remaining it will excature Crash() 11 times
+
+        }else if(doNotCall){
+            alarmSound.stop()
+            bigdiv.style.display = "contents";// showing the page after countdown
+            alarmdiv.style.display = "none"//hidding the alarm
+        }
+
+        if (timeLeft === 0) {
+            alarmSound.stop()
+            onTimesUp();
+            
+        }
+    }, 1000);
+    }
+
+
+
+    function onTimesUp() {
+        clearInterval(timerInterval);
+        console.log('time up')
+
+        if (doNotCall) {
+            console.log('do Not call pressed')
+            doNotCall = false
+        }else if (callNow) {
+            console.log('Call now pressed no need to resend sms');
+            callNow = false
+        }else{
+            Crash();// calling the crash function / No button pressed
+            bigdiv.style.display = "contents";// showing the page after countdown
+            alarmdiv.style.display = "none"//hidding the alarm
+        }
+         
+    }
+
+    function formatTime(time) {
+    const minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+
+    if (seconds < 10) {
+        seconds = `0${seconds}`;
+    }
+
+    return `${minutes}:${seconds}`;
+    }
+
+    function setRemainingPathColor(timeLeft) {
+    const { alert, warning, info } = COLOR_CODES;
+    if (timeLeft <= alert.threshold) {
+        document
+        .getElementById("base-timer-path-remaining")
+        .classList.remove(warning.color);
+        document
+        .getElementById("base-timer-path-remaining")
+        .classList.add(alert.color);
+    } else if (timeLeft <= warning.threshold) {
+        document
+        .getElementById("base-timer-path-remaining")
+        .classList.remove(info.color);
+        document
+        .getElementById("base-timer-path-remaining")
+        .classList.add(warning.color);
+    }
+    }
+
+    function calculateTimeFraction() {
+    const rawTimeFraction = timeLeft / TIME_LIMIT;
+    return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
+    }
+
+    function setCircleDasharray() {
+    const circleDasharray = `${(
+        calculateTimeFraction() * FULL_DASH_ARRAY
+    ).toFixed(0)} 283`;
+    document
+        .getElementById("base-timer-path-remaining")
+        .setAttribute("stroke-dasharray", circleDasharray);
+    }
+
 }
+
+
+
+
+
+
+
+
+//crash function that send the request to send SMS
+function Crash() {
+    db.allDocs({
+        include_docs: true,
+        attachments: true
+    }).then( (result) =>{
+        for (let x = 0; x < result.rows.length; x++) {
+            let phoneNumStrMsg= result.rows[x].doc.phone;
+            phoneNumStrMsg = phoneNumStrMsg.replace(/-/g, "");
+            let name = result.rows[x].doc.name;
+
+            let data = {
+                name: name,
+                phone: phoneNumStrMsg
+            }
+            console.log('sendding msg to:', result.rows[x].doc.name);
+            getCoordinateAndSendMessage(data); //Send a message to all registred contacts
+
+            
+        }
+
+    }).catch( (err) => {
+        console.log(err);
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+//Send message and get position
+async function getCoordinateAndSendMessage(phoneNumber) {
+    let get = new Promise((res, rej) =>{
+         navigator.geolocation.getCurrentPosition((position) => {
+ 
+             var coordinates = {
+                 latitude: position.coords.latitude,
+                 longitude: position.coords.longitude
+             }
+             this.coordinates = coordinates;
+             res(coordinates);
+         }, (err) =>{
+             console.log('error: ', err)
+             res(err)
+         }, { timeout: 30000, maximumAge: 2000, enableHighAccuracy: true });
+    }) 
+ 
+    get.then(() =>{
+         let msgCoordinate = this.coordinates
+         
+         let latitude = msgCoordinate.latitude;
+         let longitude = msgCoordinate.longitude;
+ 
+         let message = "🚨I had an accident !!!💥 \n Please come help me these are my coordinates: \n 🛰️🛰️Latitude: " + latitude + "\n 🛰️Longitude: " + longitude  + "\n🌐Easy link: https://www.google.com/maps/search/?api=1&query="+ latitude + ","+longitude +"\n This message have been sent automaticly using SafeCrash 🚙"
+         let options= {
+             replaceLineBreaks: true, // true to replace \n by a new line
+                 android: {
+                     intent: 'INTENT'  // send SMS with the native android SMS messaging
+                     //intent: '' // send SMS without opening any other app, require : android.permission.SEND_SMS and android.permission.READ_PHONE_STATE
+                 }
+ 
+         };
+
+
+
+
+         console.log('name:', phoneNumber.name, "phone: ", phoneNumber.phone, "data: ", phoneNumber);
+
+         let number = phoneNumber.phone
+
+         let intent = '';
+         let error = (err) => {console.log('Error: ' + err)};
+         sms.send(number, message, intent, ()=>{
+             console.log('SOS SENT ! ')
+             cordova.plugins.notification.local.schedule({
+                title: 'SOS SENT !',
+                text: 'An SOS have been sent to '+ phoneNumber.name,
+                foreground: true
+            });
+         }, error);
+         
+    })
+    return await get;
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

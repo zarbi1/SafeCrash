@@ -23,35 +23,73 @@ By Hadrien Casadesus
         <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
         <meta name="color-scheme" content="light dark">
         <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="css/countdown.css">
         <title>SafeCrash | Home</title>
     </head>
-    <body onload="onloadJS()">  
+    <body onload="onloadJS()">
+        <div id="globalDiv" class="globalDiv">
+            <h1 class="title-Crash-General"><a class="title-Safe">Safe</a>Crash</h1>
         
-        <h1 class="title-Crash-General"><a class="title-Safe">Safe</a>Crash</h1>
+            <div class="subtitle">
+                <p>The little thing that can save your life</p>
+            </div>
+            <div class="boxforbtn">
+                <button class="infobtn" onclick="infonotification()">HELP</button>
+            </div>
+            <br><br><br>
+            <div class="box">
+                <button onclick="addContacts()" class="addbtn">Add Emergency Contacts</button>
+            </div>
+            <br>
+            <div class="em-contact-title">
+                <p id="printtest">Emergency Contacts List:</p>
+            </div>
+            <div class="em-contact-list" id="em-contact-list">
+            </div>
+            <br>
+            <div id="boudnStaetContainer">
+                <p id="boundState"></p>
+            </div>
+            <br>
+            <div class="bound" id="boundSafeCrashContainer">
+                <button onclick="Bound()" class="bound-btn" id="bound-btn">Bound SafeCrash</button>
+            </div>
+
+        </div>  
         
-        <div class="subtitle">
-            <p>The little thing that can save your life</p>
+        <!--
+            Alarm mode
+        -->
+        <div id="alarm" class="alarmContainer">
+            <h1>SafeCrash</h1>
+            <div>
+                <h2>We detected an accident, are you ok ?</h2>
+            </div>
+            <div class="countdown" id="countdown">
+            </div>
+            <br><br>
+            <div class="buttons1" >
+                <button class="callNow" id="callNow">CONTACT MY EMERGENCY CONTACTS</button>
+                <br><br>
+                
+            </div>
+            <div class="buttons2">
+                <button class="doNotCall" id="doNotCall">I AM OK DONT SEND AN SMS</button>
+            </div>
         </div>
-        <div class="boxforbtn">
-            <button class="infobtn" onclick="infonotification()">HELP</button>
-        </div>
-        <br><br><br>
-        <div class="box">
-            <button onclick="addContacts()" class="addbtn">Add Emergency Contacts</button>
-        </div>
-        <br>
-        <div class="em-contact-title">
-            <p id="printtest">Emergency Contacts List:</p>
-        </div>
-        <div class="em-contact-list" id="em-contact-list">
-        </div>
-        
-        <div class="bound" id="boundSafeCrashContainer">
-            <button onclick="Bound()" class="bound-btn" id="bound-btn">Bound SafeCrash</button>
-        </div>
-        <div id="boudnStaetContainer">
-            <p id="boundState"></p>
-        </div>
+       
+    
+
+
+
+
+
+
+
+
+
+
+
 
         <footer class="footer"><p>Made in 🇫🇷 with ❤️ <br>By Hadrien Casadesus</p></footer>
         <script src="cordova.js"></script>
