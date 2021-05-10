@@ -27,9 +27,6 @@ function onDeviceReady (){
 
 
 
-
-
-
     //Check app Permissions
     const permissionlist= [ //Add new permissions here
         permissions.READ_CONTACTS,
@@ -188,7 +185,6 @@ async function autoconnect(){
             if (limiter !=0) {
                 console.log("bug detected it's not a crash")
             }else{
-
                 //CRASH DETECTED WE NEED TO SEND SMS
                 console.log('connected to:', device )
                 console.log('crash detected')
@@ -239,8 +235,7 @@ function checkBound() {
     ble.bondedDevices((conectedDevices) =>{
         console.log('Bounded devices: ', conectedDevices);
         for (let z = 0; z < conectedDevices.length; z++) {
-            if (conectedDevices[z].name == "Boom Shakalaka" || conectedDevices[z].name == "LE-Boom Shakalaka") { //NEED TO CHANGE THE NAME WHEN ARDUINO CODE IS FINISHED
-
+            if (conectedDevices[z].name == "SafeCrash127EBoundMode") { //We are checking if the esp is in bound mode
 
                 //Saving the device in internal db
                 deviceID = conectedDevices[z].id;
