@@ -26,7 +26,6 @@ function onDeviceReady (){
     const permissions = cordova.plugins.permissions;
 
 
-
     //Check app Permissions
     const permissionlist= [ //Add new permissions here
         permissions.READ_CONTACTS,
@@ -124,7 +123,6 @@ function onDeviceReady (){
 
 
 
-
     //BLE
     bleEn(); //check if ble is enabled
     autoconnect()//auto connect to the safecrash device
@@ -179,21 +177,42 @@ async function autoconnect(){
     console.log('tempid: ', tempID)
     //launching auto connect to check if we didn't crash into a tree (^人^)
     if (tempID !== '' || tempID !== null) { //we will need to add an other check to see if we recived an information about a bound mode
-        ble.autoConnect(tempID, (device) => { 
-            console.log('safecrash disconnected')     //The connectCallback is buged so I am going to detect if the device is disconnected
-        }, (device) => {
+        ble.autoConnect(tempID, (device) => {
             if (limiter !=0) {
                 console.log("bug detected it's not a crash")
             }else{
+                
                 //CRASH DETECTED WE NEED TO SEND SMS
                 console.log('connected to:', device )
-                console.log('crash detected')
-                cordova.plugins.backgroundMode.unlock();
-                alarm();
+                console.log('crash detected');
 
-            }
+                //making a quick check if we are not in boundMode
+                ble.scan([], 25, (devicesFounded) =>{
+                    console.log(JSON.stringify(devicesFounded));
+                    for (let z = 0; z < devicesFounded.length; z++) {
+                        let name = devicesFounded[z].name;
 
-            
+                        if (name == "SafeCrash127E") {
+                            z = devicesFounded.length;
+                            //it's a crash not a bound
+                            ble.stopScan();//stoping the scan
+                            cordova.plugins.backgroundMode.unlock(); 
+                            alarm();
+                             
+                        }
+                    }
+                }, (fail) => {
+                    console.warn(fail)
+                    cordova.plugins.backgroundMode.unlock(); //We are staring the alrm to be shure that there is no accident (if the scan fail)
+                    alarm();
+                });
+
+
+            } 
+                 
+        }, (device) => {
+            console.log('safecrash disconnected')//The connectCallback is buged so I am going to detect if the device is disconnected
+            ble.stopScan();//stoping the scan
         });
     }
 }
@@ -227,6 +246,26 @@ function addContacts(){
 
 
 
+//if the button to clear the database is pressed
+async function clearDB() {
+    deviceDB.allDocs({
+        include_docs: true,
+        attachments: true
+    }).then( (result) =>{
+        for (let x = 0; x < result.rows.length; x++) {
+            console.log(result.rows[x].doc._id);
+            deviceDB.get(result.rows[x].id).then( (doc) =>{
+                deviceDB.remove(doc);
+            })
+            
+        }
+
+    }).catch( (err) => {
+        console.log('NEW ERR: ' + err);
+    });
+
+}
+
 
 //check if safeCrash is bounded
 let bounded = false;
@@ -235,7 +274,7 @@ function checkBound() {
     ble.bondedDevices((conectedDevices) =>{
         console.log('Bounded devices: ', conectedDevices);
         for (let z = 0; z < conectedDevices.length; z++) {
-            if (conectedDevices[z].name == "SafeCrash127EBoundMode") { //We are checking if the esp is in bound mode
+            if (conectedDevices[z].name == "SafeCrash127EBoundMode" || conectedDevices[z].name  == "SafeCrash127E") { //We are checking if the esp is in bound mode
 
                 //Saving the device in internal db
                 deviceID = conectedDevices[z].id;
@@ -246,7 +285,16 @@ function checkBound() {
                     name: deviceName
                 }
 
+
+
+                //We need to clear the db before putting more devices in it
                 
+
+
+
+
+
+
                 deviceDB.put(deviceInfo, (err, result) =>{
                     if (!err) {
                         console.log('Registered id in db')

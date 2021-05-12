@@ -16,7 +16,7 @@
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 #define CHARACTERISTIC_UUIDBOUND "e15507b1-17b0-47bd-8eeb-a2c0c64fc744"
 
-#define PINbutton 26
+#define PINbutton 27
 #define led 14
 
 
