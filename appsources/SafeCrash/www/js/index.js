@@ -218,6 +218,8 @@ async function autoconnect(){
 }
 
 
+
+//Adding contacts
 function addContacts(){
     navigator.contacts.pickContact( (contact) =>{
         let contactSet = {
@@ -570,7 +572,7 @@ function alarm() {
     
 
     function startTimer() {
-        sound.media.play() //we need to be shure that the sound wont stop util we say it so I've put a big amount of loop
+        sound.media.play({numberOfLoops: 2}) //looping for 15 sec
         timerInterval = setInterval(() => {
             timePassed = timePassed += 1;
             timeLeft = TIME_LIMIT - timePassed;

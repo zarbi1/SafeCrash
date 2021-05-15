@@ -138,226 +138,278 @@ body{
     border-radius: 10px;
   }
   
-  .button:hover {
-    background: rgb(255, 255, 255);
-    box-shadow: 0px 2px 10px 5px #d72323;
-    color: #000;
-  }
-  
-  .button:after {
-    content: "";
-    background: #d72323;
-    display: block;
-    position: absolute;
-    padding-top: 300%;
-    padding-left: 350%;
-    margin-left: -20px !important;
-    margin-top: -120%;
-    opacity: 0;
-    transition: all 0.8s
-  }
-  
-  .button:active:after {
-    padding: 0;
-    margin: 0;
-    opacity: 1;
-    transition: 0s
-  }
-  
-  .button:focus { outline:0; }
+.button:hover {
+  background: rgb(255, 255, 255);
+  box-shadow: 0px 2px 10px 5px #d72323;
+  color: #000;
+}
+
+.button:after {
+  content: "";
+  background: #d72323;
+  display: block;
+  position: absolute;
+  padding-top: 300%;
+  padding-left: 350%;
+  margin-left: -20px !important;
+  margin-top: -120%;
+  opacity: 0;
+  transition: all 0.8s
+}
+
+.button:active:after {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  transition: 0s
+}
+
+.button:focus { outline:0; }
 
 
-  /*Contact Container*/
-  .contactContainer{
-    border:1px solid red;
-    border-radius: 15px;
-    padding-left: 10px;
-    padding-bottom: 5px;
-  }
+/*Contact Container*/
+.contactContainer{
+  border:1px solid red;
+  border-radius: 15px;
+  padding-left: 10px;
+  padding-bottom: 5px;
+}
 
-  .footer{
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-  }
-
-
-  .alarmContainer{
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 999;
-    width: 100%;
-    height: 23px;
-  }
-
-  .globalDiv{
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 999;
-    width: 100%;
-    height: 23px;
-  }
-
-  .countdown{
-    display: flex;
-    justify-content: center;
-  }
+.footer{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
 
 
-  /* Bound Button*/
+.alarmContainer{
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  height: 23px;
+}
 
-  .bound-btn {
-    margin-left: 6%;
-    text-align: center;
-    text-transform: uppercase;
-    cursor: pointer;
-    font-size: 15px;
-    letter-spacing: 4px;
-    position: relative;
-    background-color: #7c7e90;
-    border: none;
-    color: #fff;
-    padding: 10px;
-    width: 300px;
-    text-align: center;
-    transition-duration: 0.4s;
-    overflow: hidden;
-    box-shadow: 0 5px 15px #193047;
-    border-radius: 10px;
-  }
-  
-  .bound-btn:hover {
-    background: rgb(255, 255, 255);
-    box-shadow: 0px 2px 10px 5px #7c7e90;
-    color: #000;
-  }
-  
-  .bound-btn:after {
-    content: "";
-    background: #7c7e90;
-    display: block;
-    position: absolute;
-    padding-top: 300%;
-    padding-left: 350%;
-    margin-left: -20px !important;
-    margin-top: -120%;
-    opacity: 0;
-    transition: all 0.8s
-  }
-  
-  .bound-btn:active:after {
-    padding: 0;
-    margin: 0;
-    opacity: 1;
-    transition: 0s
-  }
-  
-  .bound-btn:focus { outline:0; }
+.globalDiv{
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  height: 23px;
+}
 
-  /* SendNow Button*/
-
-  .callNow {
-    margin-left: 6%;
-    text-align: center;
-    text-transform: uppercase;
-    cursor: pointer;
-    font-size: 15px;
-    letter-spacing: 4px;
-    position: relative;
-    background-color: #ff0000;
-    border: none;
-    color: #fff;
-    padding: 10px;
-    width: 300px;
-    text-align: center;
-    transition-duration: 0.4s;
-    overflow: hidden;
-    box-shadow: 0 5px 15px #193047;
-    border-radius: 10px;
-  }
-  
-  .callNow:hover {
-    background: rgb(255, 255, 255);
-    box-shadow: 0px 2px 10px 5px #ff0000;
-    color: #000;
-  }
-  
-  .callNow:after {
-    content: "";
-    background: #ff0000;
-    display: block;
-    position: absolute;
-    padding-top: 300%;
-    padding-left: 350%;
-    margin-left: -20px !important;
-    margin-top: -120%;
-    opacity: 0;
-    transition: all 0.8s
-  }
-  
-  .callNow:active:after {
-    padding: 0;
-    margin: 0;
-    opacity: 1;
-    transition: 0s
-  }
-  
-  .callNow:focus { outline:0; }
+.countdown{
+  display: flex;
+  justify-content: center;
+}
 
 
+/* Bound Button*/
+
+.bound-btn {
+  margin-left: 6%;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-size: 15px;
+  letter-spacing: 4px;
+  position: relative;
+  background-color: #7c7e90;
+  border: none;
+  color: #fff;
+  padding: 10px;
+  width: 300px;
+  text-align: center;
+  transition-duration: 0.4s;
+  overflow: hidden;
+  box-shadow: 0 5px 15px #193047;
+  border-radius: 10px;
+}
+
+.bound-btn:hover {
+  background: rgb(255, 255, 255);
+  box-shadow: 0px 2px 10px 5px #7c7e90;
+  color: #000;
+}
+
+.bound-btn:after {
+  content: "";
+  background: #7c7e90;
+  display: block;
+  position: absolute;
+  padding-top: 300%;
+  padding-left: 350%;
+  margin-left: -20px !important;
+  margin-top: -120%;
+  opacity: 0;
+  transition: all 0.8s
+}
+
+.bound-btn:active:after {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  transition: 0s
+}
+
+.bound-btn:focus { outline:0; }
+
+/* SendNow Button*/
+
+.callNow {
+  margin-left: 6%;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-size: 15px;
+  letter-spacing: 4px;
+  position: relative;
+  background-color: #ff0000;
+  border: none;
+  color: #fff;
+  padding: 10px;
+  width: 300px;
+  text-align: center;
+  transition-duration: 0.4s;
+  overflow: hidden;
+  box-shadow: 0 5px 15px #193047;
+  border-radius: 10px;
+}
+
+.callNow:hover {
+  background: rgb(255, 255, 255);
+  box-shadow: 0px 2px 10px 5px #ff0000;
+  color: #000;
+}
+
+.callNow:after {
+  content: "";
+  background: #ff0000;
+  display: block;
+  position: absolute;
+  padding-top: 300%;
+  padding-left: 350%;
+  margin-left: -20px !important;
+  margin-top: -120%;
+  opacity: 0;
+  transition: all 0.8s
+}
+
+.callNow:active:after {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  transition: 0s
+}
+
+.callNow:focus { outline:0; }
 
 
-  /* Dismiss Button*/
 
-  .doNotCall {
-    margin-left: 6%;
-    text-align: center;
-    text-transform: uppercase;
-    cursor: pointer;
-    font-size: 15px;
-    letter-spacing: 4px;
-    position: relative;
-    background-color: #0abb04;
-    border: none;
-    color: #fff;
-    padding: 10px;
-    width: 300px;
-    text-align: center;
-    transition-duration: 0.4s;
-    overflow: hidden;
-    box-shadow: 0 5px 15px #193047;
-    border-radius: 10px;
-  }
-  
-  .doNotCall:hover {
-    background: rgb(255, 255, 255);
-    box-shadow: 0px 2px 10px 5px #0abb04;
-    color: #000;
-  }
-  
-  .doNotCall:after {
-    content: "";
-    background: #0abb04;
-    display: block;
-    position: absolute;
-    padding-top: 300%;
-    padding-left: 350%;
-    margin-left: -20px !important;
-    margin-top: -120%;
-    opacity: 0;
-    transition: all 0.8s
-  }
-  
-  .doNotCall:active:after {
-    padding: 0;
-    margin: 0;
-    opacity: 1;
-    transition: 0s
-  }
-  
-  .doNotCall:focus { outline:0; }
+
+/* Dismiss Button*/
+
+.doNotCall {
+  margin-left: 6%;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-size: 15px;
+  letter-spacing: 4px;
+  position: relative;
+  background-color: #0abb04;
+  border: none;
+  color: #fff;
+  padding: 10px;
+  width: 300px;
+  text-align: center;
+  transition-duration: 0.4s;
+  overflow: hidden;
+  box-shadow: 0 5px 15px #193047;
+  border-radius: 10px;
+}
+
+.doNotCall:hover {
+  background: rgb(255, 255, 255);
+  box-shadow: 0px 2px 10px 5px #0abb04;
+  color: #000;
+}
+
+.doNotCall:after {
+  content: "";
+  background: #0abb04;
+  display: block;
+  position: absolute;
+  padding-top: 300%;
+  padding-left: 350%;
+  margin-left: -20px !important;
+  margin-top: -120%;
+  opacity: 0;
+  transition: all 0.8s
+}
+
+.doNotCall:active:after {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  transition: 0s
+}
+
+.doNotCall:focus { outline:0; }
+
+
+
+
+/* Clear Cache Button*/
+.cacheb {
+  margin-left: 6%;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-size: 15px;
+  letter-spacing: 4px;
+  position: relative;
+  background-color: #7c7e90;
+  border: none;
+  color: #fff;
+  padding: 10px;
+  width: 300px;
+  text-align: center;
+  transition-duration: 0.4s;
+  overflow: hidden;
+  box-shadow: 0 5px 15px #193047;
+  border-radius: 10px;
+}
+
+.cacheb:hover {
+  background: rgb(255, 255, 255);
+  box-shadow: 0px 2px 10px 5px #7c7e90;
+  color: #000;
+}
+
+.cacheb:after {
+  content: "";
+  background: #7c7e90;
+  display: block;
+  position: absolute;
+  padding-top: 300%;
+  padding-left: 350%;
+  margin-left: -20px !important;
+  margin-top: -120%;
+  opacity: 0;
+  transition: all 0.8s
+}
+
+.cacheb:active:after {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  transition: 0s
+}
+
+.cacheb:focus { outline:0; }

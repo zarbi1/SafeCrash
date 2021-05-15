@@ -17,12 +17,13 @@
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
-        <splash density="hdpi" src="res/screen/android/splash-port-hdpi.png" />
-        <splash density="ldpi" src="res/screen/android/splash-port-ldpi.png" />
-        <splash density="mdpi" src="res/screen/android/splash-port-mdpi.png" />
-        <splash density="xhdpi" src="res/screen/android/splash-port-xhdpi.png" />
-        <splash density="xxhdpi" src="res/screen/android/splash-port-xxhdpi.png" />
-        <splash density="xxxhdpi" src="res/screen/android/splash-port-xxhdpi.png" />
+        <splash density="hdpi" src="res/screen/android/splash_port_hdpi.png" />
+        <splash density="ldpi" src="res/screen/android/splash_port_ldpi.png" />
+        <splash density="mdpi" src="res/screen/android/splash_port_mdpi.png" />
+        <splash density="xhdpi" src="res/screen/android/splash_port_xhdpi.png" />
+        <splash density="xxhdpi" src="res/screen/android/splash_port_xxhdpi.png" />
+        <splash density="xxxhdpi" src="res/screen/android/splash_port_xxhdpi.png" />
+        <icon src="res/icon.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -39,5 +40,6 @@
         <param name="android-package" value="org.apache.cordova.vibration.Vibration" />
     </feature>
     <engine name="ios" />
-    <engine name="android" />
+
+
 </widget>
