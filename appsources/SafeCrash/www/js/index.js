@@ -185,29 +185,9 @@ async function autoconnect(){
                 //CRASH DETECTED WE NEED TO SEND SMS
                 console.log('connected to:', device )
                 console.log('crash detected');
-
+                disconnect(tempID);
                 //making a quick check if we are not in boundMode
-                ble.scan([], 25, (devicesFounded) =>{
-                    console.log(JSON.stringify(devicesFounded));
-                    for (let z = 0; z < devicesFounded.length; z++) {
-                        let name = devicesFounded[z].name;
-
-                        if (name == "SafeCrash127E") {
-                            z = devicesFounded.length;
-                            //it's a crash not a bound
-                            ble.stopScan();//stoping the scan
-                            cordova.plugins.backgroundMode.unlock(); 
-                            alarm();
-                             
-                        }
-                    }
-                }, (fail) => {
-                    console.warn(fail)
-                    cordova.plugins.backgroundMode.unlock(); //We are staring the alrm to be shure that there is no accident (if the scan fail)
-                    alarm();
-                });
-
-
+                
             } 
                  
         }, (device) => {
@@ -218,6 +198,44 @@ async function autoconnect(){
 }
 
 
+
+
+function disconnect(tempID) {
+    ble.disconnect(tempID, (succ)=>{
+        console.log('disconected for a scan: ', succ);
+        ble.scan([], 25, (devicesFounded) =>{
+            console.log(JSON.stringify(devicesFounded));
+            for (let z = 0; z < devicesFounded.length; z++) {
+                let name = devicesFounded[z].name;
+
+                if (name == "SafeCrash127E") {
+                    z = devicesFounded.length;
+                    //it's a crash not a bound
+                    ble.stopScan();//stoping the scan
+                    cordova.plugins.backgroundMode.unlock(); 
+                    alarm();
+                     
+                }
+                if (name == "SafeCrash127EBoundMode") {
+                    z = devicesFounded.length;
+                    //it's a bound
+                    ble.stopScan();//stoping the scan
+                    autoconnect();
+                     
+                }
+
+            }
+        }, (fail) => {
+            console.warn(fail)
+            cordova.plugins.backgroundMode.unlock(); //We are staring the alrm to be shure that there is no accident (if the scan fail)
+            alarm();
+        });
+    }, (err) =>{
+        console.error('Disconect error: ', err);
+        window.location.reload();
+    });
+
+}
 
 //Adding contacts
 function addContacts(){
@@ -589,17 +607,19 @@ function alarm() {
                 alarmdiv.style.display = "none"//hidding the alarm
                 sound.media.stop()
                 timeLeft =0; //setting time left to 0 beacuse if the timer is at 10 sec remaining it will excature Crash() 11 times
+                autoconnect();
 
             }else if(doNotCall){
                 sound.media.stop()
                 bigdiv.style.display = "contents";// showing the page after countdown
                 alarmdiv.style.display = "none"//hidding the alarm
+                autoconnect();
             }
 
             if (timeLeft === 0) {
                 sound.media.stop()
                 onTimesUp();
-                
+                autoconnect();
             }
         }, 1000);
     }

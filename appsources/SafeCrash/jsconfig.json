@@ -1,1 +1,9 @@
-{}
+{
+    "release": {
+    "keystore": "./safecrash.keystore",
+    "storePassword": "Jr.$S9XNUsLq",
+    "alias": "SafeCrash",
+    "password" : "Jr.$S9XNUsLq",
+    "keystoreType": "pkcs12"
+}
+}
