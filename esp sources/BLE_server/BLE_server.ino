@@ -16,7 +16,7 @@
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 #define CHARACTERISTIC_UUIDBOUND "e15507b1-17b0-47bd-8eeb-a2c0c64fc744"
 
-#define PINbutton 27
+#define PINbutton 34
 #define led 14
 
 
@@ -27,10 +27,10 @@ void setup() {
   pinMode(PINbutton, INPUT);
   btnstate = digitalRead(PINbutton);
   pinMode(led, OUTPUT);
-
-  if (btnstate == 0){
+Serial.println(btnstate);
+  if (btnstate == 1){
     
-    Serial.println(btnstate);
+    
     digitalWrite(led, HIGH);//so the user can see that he is in bound mode
 
     BLEDevice::init("SafeCrash127EBoundMode");
