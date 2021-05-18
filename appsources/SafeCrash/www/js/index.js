@@ -16,6 +16,13 @@ let doNotCall = document.getElementById('doNotCall').addEventListener('click', (
     doNotCall = true;
 });
 
+let switchBound = document.getElementById('boudnSwitch');
+
+
+
+
+let boundStateSwitch = false;
+
 
 document.addEventListener('deviceready', onDeviceReady, true)
 function onDeviceReady (){
@@ -113,17 +120,13 @@ function onDeviceReady (){
     })
 
 
-    //GPS
-
-
 
 
 
 
     //BLE
     bleEn(); //check if ble is enabled
-    autoconnect()//auto connect to the safecrash device
-
+    autoconnect()
 
 
 
@@ -172,8 +175,14 @@ async function getDeviceID() {
 async function autoconnect(){
     let tempID = await getDeviceID();
     console.log('tempid: ', tempID)
+    if (tempID !== '' || tempID !== null) {
+        boundStateSwitch = false;
+        boundStateSwitch.checked = true;
+    }
     //launching auto connect to check if we didn't crash into a tree (^人^)
-    if (tempID !== '' || tempID !== null) { //we will need to add an other check to see if we recived an information about a bound mode
+    if (tempID !== '' && !boundStateSwitch || tempID !== null && !boundStateSwitch) { //we will need to add an other check to see if we recived an information about a bound mode
+        console.log('starting autoconnect');
+        
         ble.autoConnect(tempID, (device) => {
             if (limiter !=0) {
                 console.log("bug detected it's not a crash")
@@ -186,65 +195,34 @@ async function autoconnect(){
                 //TEST ZONE:
 
                 //getAdapterInfo
-                bluetoothle.getAdapterInfo((infos) => {
-                    console.log("Adapter infos:", infos);
-                });
-
-                //readDescriptor
-                bluetoothle.read((descriptorsucess) =>{
-                    console.log('descriptor sucess: ', descriptorsucess)
-                    console.log('VALUE DECODED: ', bluetoothle.encodedStringToBytes(descriptorsucess.value)); 
-                }, (err) =>{
-                    console.warn('descriptor error: ', err);
-                }, characteristic);
-
-
-                //is connected
-                bluetoothle.isConnected((sucess) =>{
-                    console.log('IS connected: ', sucess)
-                }, (err)=>{
-                    console.log('is connected err:', err);
-                }, tempID);
+                cordova.plugins.backgroundMode.unlock(); 
+                alarm();
 
 
 
 
 
 
-                /*
-                //making a quick check if we are not in boundMode
-                ble.scan([], 25, (devicesFounded) =>{
-                    console.log(JSON.stringify(devicesFounded));
-                    for (let z = 0; z < devicesFounded.length; z++) {
-                        let name = devicesFounded[z].name;
-                        console.log("name is: ", name);
-                        if (name == "SafeCrash127E") {
-                            z = devicesFounded.length;
-                            //it's a crash not a bound
-                            ble.stopScan();//stoping the scan
-                            cordova.plugins.backgroundMode.unlock(); 
-                            alarm();
-                             
-                        }
-                    }
-                    ble.bondedDevices((succ) => {
-                        console.log("connected devices after scan: ", succ);
-                    }, (fail)=>{
-                        console.warn('fail after scan: ', fail);
-                    })
-                }, (fail) => {
-                    console.warn(fail)
-                    cordova.plugins.backgroundMode.unlock(); //We are staring the alrm to be shure that there is no accident (if the scan fail)
-                    alarm();
-                });
-                */
+
+    
+                
             } 
                  
         }, (device) => {
             console.log('safecrash disconnected')//The connectCallback is buged so I am going to detect if the device is disconnected
+            bluetoothle.disconnect((suc)=>{
+                console.log('disconnect sucess: ', suc);
+            }, (err)=>{
+                console.log('disconnect err: ', err);
+            }, {address: tempID});
             ble.stopScan();//stoping the scan
         });
+        
+       
+    }else{
+        console.log('bound switch is on');
     }
+    
 }
 
 
@@ -302,67 +280,47 @@ async function clearDB() {
 //check if safeCrash is bounded
 let bounded = false;
 let deviceID = '';
-function checkBound() {
-    ble.bondedDevices((conectedDevices) =>{
-        console.log('Bounded devices: ', conectedDevices);
-        for (let z = 0; z < conectedDevices.length; z++) {
-            if (conectedDevices[z].name == "SafeCrash127EBoundMode" || conectedDevices[z].name  == "SafeCrash127E") { //We are checking if the esp is in bound mode
-
-                //Saving the device in internal db
-                deviceID = conectedDevices[z].id;
-                let deviceName = conectedDevices[z].name;
-
-                let deviceInfo = {
-                    _id: deviceID,
-                    name: deviceName
-                }
-
-
-
-                //We need to clear the db before putting more devices in it
-                
-
-
-
-
-
-
-                deviceDB.put(deviceInfo, (err, result) =>{
-                    if (!err) {
-                        console.log('Registered id in db')
-                    }else if (err.name == 'conflict'){
-                        deviceDB.get(deviceID).then( (doc) =>{ //doc is the result of the db.get(_id)
-                            deviceDB.remove(doc).then( ()=>{ //removing for the db
-                                deviceDB.put(deviceInfo, (err, result) => {
-                                    if (!err) {
-                                        console.log("device updated")
-                                    } else {
-                                        console.log(err)
-                                    }
-                                })
-                            }) 
-                        })
-                    }else{
-                        console.log(err);
-                    }
-                })
-
-
-
-                //When the arduino code will be finished I will add a function to check if safeCrash is in bound mode or not
+async function checkBound() {
+    
+    deviceDB.allDocs({
+        include_docs: true,
+        attachments: true
+    }).then( (result) =>{
+        for (let x = 0; x < result.rows.length; x++) {
+            console.log(result.rows[x].doc._id);
+            if (result.rows[x].doc.name == "SafeCrash127EBoundMode" || result.rows[x].doc.name =="SafeCrash127E") {
                 console.log('Bounded !')
                 boundState.innerHTML="SafeCrash Bounded ! If you want you can rebound SafeCrash"
                 boundBtn.innerHTML="ReBound"
                 boundBtn.style.display = "initial"; 
                 bounded =true;
-                 //To prevent a bug where SafeCrash is activating the crash mod only if it's the first time that the device is bouded
-            }
-            
-        }       
 
-    }, (error) =>{
-        console.log(error)
+
+
+
+
+            }
+
+            
+        }
+
+    }).catch( (err) => {
+        console.log('NEW ERR: ' + err);
     });
+            
+
+    //When the arduino code will be finished I will add a function to check if safeCrash is in bound mode or not
+    
+        //To prevent a bug where SafeCrash is activating the crash mod only if it's the first time that the device is bouded
+
+
+
+        
+    
+        
+
+
+    
     
 }
 
@@ -388,11 +346,14 @@ function bleEn() {
                 //show or hide bound button
                 checkBound() //Ble enabled so we need to check if SafeCrash is connected or not.
                 if (bounded) {
-                    boundState.innerHTML="SafeCrash Bounded ! If you want you can rebound SafeCrash"
+                    boundState.innerHTML="SafeCrash Bounded ! If you want you can rebound SafeCrash <strong>Please activate the bound Switch first !!!</strong>"
                     boundBtn.innerHTML="ReBound"
                     boundBtn.style.display = "initial"; 
+
                 }else{
                     boundBtn.style.display = "initial"; 
+                    boundState =false; //Device is not bounded so we are activating the checkbox
+                    switchBound.checked =true;
                 }
                  
             })
@@ -413,13 +374,56 @@ ble.startNotification(device_id, service_uuid, characteristic_uuid, success, fai
 */
 
 async function Bound() {
-    //open blue settings
-    limiter = 1;
-    ble.showBluetoothSettings((checkDevice) => {
-        console.log(checkDevice);
-        location.reload(); 
-    }, (error) => {
-        console.log(error)
+    ble.scan([], 25, (devices)=>{
+        console.log(devices);
+        let deviceId= devices.id;
+        
+        if (devices.name == "SafeCrash127EBoundMode" || devices.name == "SafeCrash127E") {
+            let deviceInfo = {
+                _id: deviceId,
+                name: devices.name
+            };
+
+
+            deviceDB.put(deviceInfo, (err, result) =>{
+                if (!err) {
+                    console.log('Registered id in db')
+                }else if (err.name == 'conflict'){
+                    deviceDB.get(deviceId).then( (doc) =>{ //doc is the result of the db.get(_id)
+                        deviceDB.remove(doc).then( ()=>{ //removing for the db
+                            deviceDB.put(deviceInfo, (err, result) => {
+                                if (!err) {
+                                    console.log("device updated")
+                                } else {
+                                    console.log(err)
+                                }
+                            })
+                        }) 
+                    })
+                }else{
+                    console.log(err);
+                }
+            })
+
+            navigator.notification.alert(
+                "SafeCrash is now Bounded please restart the app.",  // message
+                alertDismissed,         // callback
+                'SafeCrash Bounded',           // title
+                'Ok !'                  // buttonName
+            );
+            function alertDismissed(){
+                //do nothing be must be here
+            }
+            ble.stopScan((sucess) =>{
+                console.log('Scan Stopped ', sucess);
+            }, (fail) =>{
+                console.log('Cant stop scan ', fail);
+            });
+        }
+            
+        
+    }, (fail) =>{
+        console.log("SafeCrash Scan Fail", fail);
     });
 }
 
@@ -797,4 +801,44 @@ async function getCoordinateAndSendMessage(phoneNumber) {
          
     })
     return await get;
+ }
+
+
+ async function boundSelected() {
+    let tempID = await getDeviceID();  
+     if (boundStateSwitch) {
+        boundStateSwitch = false;
+        console.log(boundStateSwitch);
+
+        navigator.notification.alert(
+            'SafeCrash Activated ! You can now drive !',  // message
+            alertDismissed1,         // callback
+            'Alert',           // title
+            'Nice !'                  // buttonName
+        )
+    
+        function alertDismissed1(){
+            //do nothing be must be here
+        }
+        autoconnect()
+     }else{
+        boundStateSwitch = true;
+        console.log(boundStateSwitch);
+        ble.disconnect(tempID, (suc) =>{
+            console.log('disconnected from device: ', suc);
+        }, (err) =>{
+            console.log('error during disco: ', err);
+        });
+
+        navigator.notification.alert(
+            'SafeCrash desactivated ! Please dont forget to reactivate it before taking the wheel.',  // message
+            alertDismissed2,         // callback
+            'Alert',           // title
+            'Nice !'                  // buttonName
+        )
+        function alertDismissed2(){
+            //do nothing be must be here
+        }
+    
+     }
  }

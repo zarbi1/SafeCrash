@@ -50,7 +50,14 @@ By Hadrien Casadesus
             <div id="boudnStaetContainer">
                 <p id="boundState"></p>
             </div>
-            <br>
+            
+            <p>Please activate this switch if you want to bound or re-bound SafeCrash</p>
+            <div class="boundSwitch">
+                <label class="switch">
+                    <input type="checkbox" id="boudnSwitch" name="boudnSwitch" value="false" onclick="boundSelected()" >
+                    <span class="slider round"></span>
+                </label>
+            </div>
             <div class="bound" id="boundSafeCrashContainer">
                 <button onclick="Bound()" class="bound-btn" id="bound-btn">Bound SafeCrash</button>
             </div>
