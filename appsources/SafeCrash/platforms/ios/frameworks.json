@@ -1,0 +1,10 @@
+{
+    "AddressBook.framework": 1,
+    "AddressBookUI.framework": 1,
+    "AudioToolbox.framework": 2,
+    "UserNotifications.framework": 1,
+    "CoreLocation.framework": 2,
+    "libsqlite3.dylib": 1,
+    "MessageUI.framework": 1,
+    "CoreBluetooth.framework": 2
+}
