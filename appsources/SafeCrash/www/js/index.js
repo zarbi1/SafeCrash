@@ -1,20 +1,21 @@
-const db = new PouchDB('SafeCrashDB.db', {adapter: 'cordova-sqlite'});
-const deviceDB = new PouchDB('DeviceDB.db', {adapter: 'cordova-sqlite'});
+const db = new PouchDB('SafeCrashDB.db', { adapter: 'cordova-sqlite' });
+const deviceDB = new PouchDB('DeviceDB.db', { adapter: 'cordova-sqlite' });
 
-let contactlist = document.getElementById('em-contact-list');
-let boundState= document.getElementById('boundState');
+let boundState = document.getElementById('boundState');
 let boundBtn = document.getElementById('bound-btn');
 let bigdiv = document.getElementById('globalDiv');
 let alarmdiv = document.getElementById('alarm');
 let smsState = document.getElementById('smsstatepara');
 let callNow = false
 let doCall = false
-let callNowBtn = document.getElementById('callNow').addEventListener('click', ()=>{
+let callNowBtn = document.getElementById('callNow').addEventListener('click', () => {
     callNow = true;
 });
-let doNotCall = document.getElementById('doNotCall').addEventListener('click', ()=>{
+let doNotCall = document.getElementById('doNotCall').addEventListener('click', () => {
     doNotCall = true;
 });
+
+let dropdown = document.getElementById('dropdown');
 
 let switchBound = document.getElementById('boudnSwitch');
 
@@ -25,13 +26,13 @@ let boundStateSwitch = false;
 
 
 document.addEventListener('deviceready', onDeviceReady, true)
-function onDeviceReady (){
+function onDeviceReady() {
     console.log('Device is Ready SafeCrash Starting...')
     const permissions = cordova.plugins.permissions;
 
 
     //Check app Permissions
-    const permissionlist= [ //Add new permissions here
+    const permissionlist = [ //Add new permissions here
         permissions.READ_CONTACTS,
         permissions.VIBRATE,
         permissions.RECEIVE_BOOT_COMPLETED,
@@ -45,23 +46,23 @@ function onDeviceReady (){
         permissions.ACCESS_COARSE_LOCATION,
         permissions.ACCESS_FINE_LOCATION,
         permissions.ACCESS_BACKGROUND_LOCATION,
-        permissions.SYSTEM_ALERT_WINDOW 
+        permissions.SYSTEM_ALERT_WINDOW
     ]
 
 
-    permissions.checkPermission(permissionlist, (sucess)=>{
-        if (!sucess.hasPermission){
+    permissions.checkPermission(permissionlist, (sucess) => {
+        if (!sucess.hasPermission) {
             permissions.requestPermissions(
                 permissionlist,
-                (state)=>{
+                (state) => {
                     if (!state.hasPermission) console.log(state);
-                }, (err) =>{
+                }, (err) => {
                     console.log(err);
                 }
             )
         };
         console.log('permission1 ok!');
-    }, ()=>{
+    }, () => {
 
     });
     cordova.plugins.backgroundMode.requestForegroundPermission();
@@ -73,15 +74,15 @@ function onDeviceReady (){
 
     //BackGround
     cordova.plugins.backgroundMode.enable(); //enable background mod
-    cordova.plugins.backgroundMode.on('enable', () =>{
-       console.log('background enabled');
+    cordova.plugins.backgroundMode.on('enable', () => {
+        console.log('background enabled');
     });
 
 
-    cordova.plugins.backgroundMode.on('activate', function() {
+    cordova.plugins.backgroundMode.on('activate', function () {
         cordova.plugins.backgroundMode.disableWebViewOptimizations();
         cordova.plugins.backgroundMode.excludeFromTaskList();
-    }); 
+    });
 
     cordova.plugins.backgroundMode.setDefaults({
         title: 'SafeCrash Runnig in background',
@@ -101,18 +102,18 @@ function onDeviceReady (){
         visibility: 'public', // Android only: one of 'private' (default), 'public' or 'secret' (see https://developer.android.com/reference/android/app/Notification.Builder.html#setVisibility(int))
     })
 
-    cordova.plugins.backgroundMode.isIgnoringBatteryOptimizations((isIgnoring) =>{
-        if(isIgnoring){
+    cordova.plugins.backgroundMode.isIgnoringBatteryOptimizations((isIgnoring) => {
+        if (isIgnoring) {
             console.log('batterie optimisation is ignored.')
-        }else{
+        } else {
             navigator.notification.alert(
                 "To correctly use SafeCrash you need to allow the app to ignore battery opimization if you didn't allowed it please restart the app and allow it.",  // message
                 alertDismissed,         // callback
                 'Info',           // title
                 'Ok !'                  // buttonName
             );
-        
-            function alertDismissed(){
+
+            function alertDismissed() {
                 //do nothing be must be here
             }
             cordova.plugins.backgroundMode.disableBatteryOptimizations();
@@ -136,7 +137,7 @@ function onDeviceReady (){
     //Autostart | I dont know if it's working
     cordova.plugins.autoStart.enable();
 
-    
+
 
 
 }
@@ -159,20 +160,20 @@ async function getDeviceID() {
         deviceDB.allDocs({
             include_docs: true,
             attachments: true
-        }).then( (result) => {
+        }).then((result) => {
             console.log("result is: ", result.rows[0].id)
             res(result.rows[0].id)
-        }).catch( (err) => {
+        }).catch((err) => {
             console.log(err);
             res(null)
         })
-    }) 
+    })
 
     return await get;
 
 }
 
-async function autoconnect(){
+async function autoconnect() {
     let tempID = await getDeviceID();
     console.log('tempid: ', tempID)
     if (tempID !== '' || tempID !== null) {
@@ -182,20 +183,20 @@ async function autoconnect(){
     //launching auto connect to check if we didn't crash into a tree (^人^)
     if (tempID !== '' && !boundStateSwitch || tempID !== null && !boundStateSwitch) { //we will need to add an other check to see if we recived an information about a bound mode
         console.log('starting autoconnect');
-        
+
         ble.autoConnect(tempID, (device) => {
-            if (limiter !=0) {
+            if (limiter != 0) {
                 console.log("bug detected it's not a crash")
-            }else{
+            } else {
 
                 //CRASH DETECTED WE NEED TO SEND SMS
-                console.log('connected to:', device )
+                console.log('connected to:', device)
                 console.log('crash detected');
 
                 //TEST ZONE:
 
                 //getAdapterInfo
-                cordova.plugins.backgroundMode.unlock(); 
+                cordova.plugins.backgroundMode.unlock();
                 alarm();
 
 
@@ -204,55 +205,55 @@ async function autoconnect(){
 
 
 
-    
-                
-            } 
-                 
+
+
+            }
+
         }, (device) => {
             console.log('safecrash disconnected')//The connectCallback is buged so I am going to detect if the device is disconnected
-            bluetoothle.disconnect((suc)=>{
+            bluetoothle.disconnect((suc) => {
                 console.log('disconnect sucess: ', suc);
-            }, (err)=>{
+            }, (err) => {
                 console.log('disconnect err: ', err);
-            }, {address: tempID});
+            }, { address: tempID });
             ble.stopScan();//stoping the scan
         });
-        
-       
-    }else{
+
+
+    } else {
         console.log('bound switch is on');
     }
-    
+
 }
 
 
 
 //Adding contacts
-function addContacts(){
-    navigator.contacts.pickContact( (contact) =>{
+function addContacts() {
+    navigator.contacts.pickContact((contact) => {
         let contactSet = {
             _id: contact.id,
-            name : contact.displayName,
+            name: contact.displayName,
             phone: contact.phoneNumbers[0].value
         };
-        
 
-            
-        db.put(contactSet, (err, result)=> {
+
+
+        db.put(contactSet, (err, result) => {
             if (!err) {
                 console.log('Sucess !')
                 window.location.reload();
-            }else{
+            } else {
                 console.error(err);
 
             }
         })
 
-        
+
     })
-    
-   
-}      
+
+
+}
 
 
 
@@ -261,16 +262,16 @@ async function clearDB() {
     deviceDB.allDocs({
         include_docs: true,
         attachments: true
-    }).then( (result) =>{
+    }).then((result) => {
         for (let x = 0; x < result.rows.length; x++) {
             console.log(result.rows[x].doc._id);
-            deviceDB.get(result.rows[x].id).then( (doc) =>{
+            deviceDB.get(result.rows[x].id).then((doc) => {
                 deviceDB.remove(doc);
             })
-            
+
         }
 
-    }).catch( (err) => {
+    }).catch((err) => {
         console.log('NEW ERR: ' + err);
     });
 
@@ -281,19 +282,19 @@ async function clearDB() {
 let bounded = false;
 let deviceID = '';
 async function checkBound() {
-    
+
     deviceDB.allDocs({
         include_docs: true,
         attachments: true
-    }).then( (result) =>{
+    }).then((result) => {
         for (let x = 0; x < result.rows.length; x++) {
             console.log(result.rows[x].doc._id);
-            if (result.rows[x].doc.name == "SafeCrash127EBoundMode" || result.rows[x].doc.name =="SafeCrash127E") {
+            if (result.rows[x].doc.name == "SafeCrash127EBoundMode" || result.rows[x].doc.name == "SafeCrash127E") {
                 console.log('Bounded !')
-                boundState.innerHTML="SafeCrash Bounded ! If you want you can rebound SafeCrash"
-                boundBtn.innerHTML="ReBound"
-                boundBtn.style.display = "initial"; 
-                bounded =true;
+                boundState.innerHTML = "<strong>SafeCrash Bounded !</strong>"
+                boundBtn.innerHTML = "ReBound"
+                boundBtn.style.display = "initial";
+                bounded = true;
 
 
 
@@ -301,27 +302,27 @@ async function checkBound() {
 
             }
 
-            
+
         }
 
-    }).catch( (err) => {
+    }).catch((err) => {
         console.log('NEW ERR: ' + err);
     });
-            
+
 
     //When the arduino code will be finished I will add a function to check if safeCrash is in bound mode or not
-    
-        //To prevent a bug where SafeCrash is activating the crash mod only if it's the first time that the device is bouded
+
+    //To prevent a bug where SafeCrash is activating the crash mod only if it's the first time that the device is bouded
 
 
 
-        
-    
-        
 
 
-    
-    
+
+
+
+
+
 }
 
 
@@ -331,31 +332,31 @@ async function checkBound() {
 
 function bleEn() {
     ble.isEnabled(
-        
+
         () => {
             console.log('Bluetooth enabled');
             checkBound();
         },
         () => {
-            boundState.innerHTML="Please Turn on your Bluetooth before using SafeCrash"
+            boundState.innerHTML = "Please Turn on your Bluetooth before using SafeCrash"
             boundBtn.style.display = "none"; //Hidding the bound button
             ble.enable(() => {
                 //if the user enable the ble after the notification
                 console.log('Bluetooth enabled')
-                boundState.innerHTML=""
+                boundState.innerHTML = ""
                 //show or hide bound button
                 checkBound() //Ble enabled so we need to check if SafeCrash is connected or not.
                 if (bounded) {
-                    boundState.innerHTML="SafeCrash Bounded ! If you want you can rebound SafeCrash <strong>Please activate the bound Switch first !!!</strong>"
-                    boundBtn.innerHTML="ReBound"
-                    boundBtn.style.display = "initial"; 
+                    boundState.innerHTML = "<strong>SafeCrash Bounded !</strong>"
+                    boundBtn.innerHTML = "ReBound"
+                    boundBtn.style.display = "initial";
 
-                }else{
-                    boundBtn.style.display = "initial"; 
-                    boundState =false; //Device is not bounded so we are activating the checkbox
-                    switchBound.checked =true;
+                } else {
+                    boundBtn.style.display = "initial";
+                    boundState = false; //Device is not bounded so we are activating the checkbox
+                    switchBound.checked = true;
                 }
-                 
+
             })
         }
     );
@@ -367,69 +368,72 @@ function bleEn() {
 
 
 
-//futur: 
-/*
-ble.requestConnectionPriority(device_id, priority, [success], [failure]); // request the priority for the connection
-ble.startNotification(device_id, service_uuid, characteristic_uuid, success, failure); //when the phone recive a signal, then...
-*/
-
 async function Bound() {
-    ble.scan([], 25, (devices)=>{
-        console.log(devices);
-        let deviceId= devices.id;
-        
-        if (devices.name == "SafeCrash127EBoundMode" || devices.name == "SafeCrash127E") {
-            let deviceInfo = {
-                _id: deviceId,
-                name: devices.name
-            };
+    clearDB().then(  //we need to clear the DB to not have any error.
+        ble.scan([], 25, (devices) => {
+            console.log(devices);
+            let deviceId = devices.id;
+
+            if (devices.name == "SafeCrash127EBoundMode" || devices.name == "SafeCrash127E") {
+                let deviceInfo = {
+                    _id: deviceId,
+                    name: devices.name
+                };
 
 
-            deviceDB.put(deviceInfo, (err, result) =>{
-                if (!err) {
-                    console.log('Registered id in db')
-                }else if (err.name == 'conflict'){
-                    deviceDB.get(deviceId).then( (doc) =>{ //doc is the result of the db.get(_id)
-                        deviceDB.remove(doc).then( ()=>{ //removing for the db
-                            deviceDB.put(deviceInfo, (err, result) => {
-                                if (!err) {
-                                    console.log("device updated")
-                                } else {
-                                    console.log(err)
-                                }
+                deviceDB.put(deviceInfo, (err, result) => {
+                    if (!err) {
+                        console.log('Registered id in db')
+                    } else if (err.name == 'conflict') {
+                        deviceDB.get(deviceId).then((doc) => { //doc is the result of the db.get(_id)
+                            deviceDB.remove(doc).then(() => { //removing for the db
+                                deviceDB.put(deviceInfo, (err, result) => {
+                                    if (!err) {
+                                        console.log("device updated")
+                                    } else {
+                                        console.log(err)
+                                    }
+                                })
                             })
-                        }) 
-                    })
-                }else{
-                    console.log(err);
-                }
-            })
+                        })
+                    } else {
+                        console.log(err);
+                    }
+                })
 
-            navigator.notification.alert(
-                "SafeCrash is now Bounded please restart the app.",  // message
-                alertDismissed,         // callback
-                'SafeCrash Bounded',           // title
-                'Ok !'                  // buttonName
-            );
-            function alertDismissed(){
-                //do nothing be must be here
+                navigator.notification.alert(
+                    "SafeCrash is now Bounded !",  // message
+                    alertDismissed,         // callback
+                    'SafeCrash Bounded',           // title
+                    'Ok !'                  // buttonName
+                );
+                function alertDismissed() {
+                    window.location.reload() //reload the page
+                }
+                ble.stopScan((sucess) => {
+                    console.log('Scan Stopped ', sucess);
+                }, (fail) => {
+                    console.log('Cant stop scan ', fail);
+                });
             }
-            ble.stopScan((sucess) =>{
-                console.log('Scan Stopped ', sucess);
-            }, (fail) =>{
-                console.log('Cant stop scan ', fail);
-            });
-        }
-            
-        
-    }, (fail) =>{
-        console.log("SafeCrash Scan Fail", fail);
-    });
+
+
+        }, (fail) => {
+            console.log("SafeCrash Scan Fail", fail);
+        })
+    )
+
+
+
 }
 
 
 function onloadJS() {
-    
+
+
+
+
+
     function loadContacts() {
         //Getting saved contacts and diplaying them
         db.allDocs({
@@ -438,45 +442,32 @@ function onloadJS() {
         }).then(function (result) {
             console.log(result);
             for (let e = 0; e < result.rows.length; e++) {
-                let divContact = document.createElement('div');
-                let phoneNum = document.createElement('p');
-                let contactName = document.createElement('p');
-                let deleteButton = document.createElement('button'); 
-
+                let asset = document.createElement('a');
+                let deleteButton = document.createElement('button');
+                let hrline = document.createElement('hr')
 
                 //Clase Names
-                divContact.className="contactContainer";
-                phoneNum.className = "phoneNumber";
-                contactName.className = "conctactName";
                 deleteButton.className = "button";
 
 
                 //Attributes
                 deleteButton.setAttribute("onclick", 'deleteContact("' + result.rows[e].doc._id + '")')
-                
 
-
-                //remplace "-"" to nothing
-                let phoneNumStr= result.rows[e].doc.phone;
-                phoneNumStr = phoneNumStr.replace(/-/g, "");
 
                 //Inner HTML
-                phoneNum.innerHTML = "Phone Number: " + "<strong>"+ phoneNumStr + "</strong>";
-                contactName.innerHTML = "Contact Name: " + "<strong>" + result.rows[e].doc.name+ "</strong>";
-                deleteButton.innerHTML ='Delete';
+                asset.innerHTML = "<strong>" + result.rows[e].doc.name + "</strong>";
+                deleteButton.innerHTML = 'Delete';
 
+                dropdown.appendChild(asset);
+                dropdown.appendChild(deleteButton);
+                dropdown.appendChild(hrline);
 
-                contactlist.appendChild(divContact);
-                divContact.appendChild(contactName);
-                divContact.appendChild(phoneNum);
-                divContact.appendChild(deleteButton);
-                
             }
         }).catch(function (err) {
             console.log(err);
         });
     }
-    
+
     loadContacts();
 
 }
@@ -485,11 +476,11 @@ function onloadJS() {
 
 //DELETE BUTTON
 function deleteContact(contactID) {
-    
-    db.get(contactID).then( (doc) =>{ //doc is the result of the db.get(_id)
-        db.remove(doc).then( ()=>{ //removing for the db
+
+    db.get(contactID).then((doc) => { //doc is the result of the db.get(_id)
+        db.remove(doc).then(() => { //removing for the db
             window.location.reload(true); //reload the page
-        }) 
+        })
     })
 }
 
@@ -504,7 +495,7 @@ function infonotification() {
         'Ok !'                  // buttonName
     );
 
-    function alertDismissed(){
+    function alertDismissed() {
         //do nothing be must be here
     }
 }
@@ -522,34 +513,34 @@ function alarm() {
             title: 'Fight Club Rules',
             volume: 30 //set to max volume
         },
-        media:null,
-        status:{
-            '0':'MEDIA_NONE',
-            '1':'MEDIA_STARTING',
-            '2':'MEDIA_RUNNING',
-            '3':'MEDIA_PAUSED',
-            '4':'MEDIA_STOPPED'
+        media: null,
+        status: {
+            '0': 'MEDIA_NONE',
+            '1': 'MEDIA_STARTING',
+            '2': 'MEDIA_RUNNING',
+            '3': 'MEDIA_PAUSED',
+            '4': 'MEDIA_STOPPED'
         },
-        err:{
-            '1':'MEDIA_ERR_ABORTED',
-            '2':'MEDIA_ERR_NETWORK',
-            '3':'MEDIA_ERR_DECODE',
-            '4':'MEDIA_ERR_NONE_SUPPORTED'
+        err: {
+            '1': 'MEDIA_ERR_ABORTED',
+            '2': 'MEDIA_ERR_NETWORK',
+            '3': 'MEDIA_ERR_DECODE',
+            '4': 'MEDIA_ERR_NONE_SUPPORTED'
         }
     }
 
     let src = sound.track.src;
-    sound.media = new Media(src, ()=>{
+    sound.media = new Media(src, () => {
         console.log('sound played succesfully')
     }, (err) => {
         console.warn('SafeCrash Failure');
         console.log(err);
     }, (statechange) => {
-        console.log('media status is now ' + sound.status[status] );
+        console.log('media status is now ' + sound.status[status]);
     });
 
 
-    
+
     bigdiv.style.display = "none";// we need to hide everything extept the alarm
     alarmdiv.style.display = "contents"//displaying the alarm
 
@@ -558,17 +549,17 @@ function alarm() {
     const ALERT_THRESHOLD = 5;
 
     const COLOR_CODES = {
-    info: {
-        color: "green"
-    },
-    warning: {
-        color: "orange",
-        threshold: WARNING_THRESHOLD
-    },
-    alert: {
-        color: "red",
-        threshold: ALERT_THRESHOLD
-    }
+        info: {
+            color: "green"
+        },
+        warning: {
+            color: "orange",
+            threshold: WARNING_THRESHOLD
+        },
+        alert: {
+            color: "red",
+            threshold: ALERT_THRESHOLD
+        }
     };
 
     const TIME_LIMIT = 15;
@@ -603,15 +594,15 @@ function alarm() {
 
     startTimer();
 
-    
+
 
     function startTimer() {
-        sound.media.play({numberOfLoops: 2}) //looping for 15 sec
+        sound.media.play({ numberOfLoops: 2 }) //looping for 15 sec
         timerInterval = setInterval(() => {
             timePassed = timePassed += 1;
             timeLeft = TIME_LIMIT - timePassed;
             document.getElementById("base-timer-label").innerHTML = formatTime(
-            timeLeft
+                timeLeft
             );
             setCircleDasharray();
             setRemainingPathColor(timeLeft);
@@ -622,9 +613,9 @@ function alarm() {
                 bigdiv.style.display = "contents";// showing the page after countdown
                 alarmdiv.style.display = "none"//hidding the alarm
                 sound.media.stop()
-                timeLeft =0; //setting time left to 0 beacuse if the timer is at 10 sec remaining it will excature Crash() 11 times
+                timeLeft = 0; //setting time left to 0 beacuse if the timer is at 10 sec remaining it will excature Crash() 11 times
 
-            }else if(doNotCall){
+            } else if (doNotCall) {
                 sound.media.stop()
                 bigdiv.style.display = "contents";// showing the page after countdown
                 alarmdiv.style.display = "none"//hidding the alarm
@@ -633,7 +624,7 @@ function alarm() {
             if (timeLeft === 0) {
                 sound.media.stop()
                 onTimesUp();
-                
+
             }
         }, 1000);
     }
@@ -647,59 +638,59 @@ function alarm() {
         if (doNotCall) {
             console.log('do Not call pressed')
             doNotCall = false
-        }else if (callNow) {
+        } else if (callNow) {
             console.log('Call now pressed no need to resend sms');
             callNow = false
-        }else{
+        } else {
             Crash();// calling the crash function / No button pressed
             bigdiv.style.display = "contents";// showing the page after countdown
             alarmdiv.style.display = "none"//hidding the alarm
         }
-         
+
     }
 
     function formatTime(time) {
-    const minutes = Math.floor(time / 60);
-    let seconds = time % 60;
+        const minutes = Math.floor(time / 60);
+        let seconds = time % 60;
 
-    if (seconds < 10) {
-        seconds = `0${seconds}`;
-    }
+        if (seconds < 10) {
+            seconds = `0${seconds}`;
+        }
 
-    return `${minutes}:${seconds}`;
+        return `${minutes}:${seconds}`;
     }
 
     function setRemainingPathColor(timeLeft) {
-    const { alert, warning, info } = COLOR_CODES;
-    if (timeLeft <= alert.threshold) {
-        document
-        .getElementById("base-timer-path-remaining")
-        .classList.remove(warning.color);
-        document
-        .getElementById("base-timer-path-remaining")
-        .classList.add(alert.color);
-    } else if (timeLeft <= warning.threshold) {
-        document
-        .getElementById("base-timer-path-remaining")
-        .classList.remove(info.color);
-        document
-        .getElementById("base-timer-path-remaining")
-        .classList.add(warning.color);
-    }
+        const { alert, warning, info } = COLOR_CODES;
+        if (timeLeft <= alert.threshold) {
+            document
+                .getElementById("base-timer-path-remaining")
+                .classList.remove(warning.color);
+            document
+                .getElementById("base-timer-path-remaining")
+                .classList.add(alert.color);
+        } else if (timeLeft <= warning.threshold) {
+            document
+                .getElementById("base-timer-path-remaining")
+                .classList.remove(info.color);
+            document
+                .getElementById("base-timer-path-remaining")
+                .classList.add(warning.color);
+        }
     }
 
     function calculateTimeFraction() {
-    const rawTimeFraction = timeLeft / TIME_LIMIT;
-    return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
+        const rawTimeFraction = timeLeft / TIME_LIMIT;
+        return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
     }
 
     function setCircleDasharray() {
-    const circleDasharray = `${(
-        calculateTimeFraction() * FULL_DASH_ARRAY
-    ).toFixed(0)} 283`;
-    document
-        .getElementById("base-timer-path-remaining")
-        .setAttribute("stroke-dasharray", circleDasharray);
+        const circleDasharray = `${(
+            calculateTimeFraction() * FULL_DASH_ARRAY
+        ).toFixed(0)} 283`;
+        document
+            .getElementById("base-timer-path-remaining")
+            .setAttribute("stroke-dasharray", circleDasharray);
     }
 
 }
@@ -716,9 +707,9 @@ function Crash() {
     db.allDocs({
         include_docs: true,
         attachments: true
-    }).then( (result) =>{
+    }).then((result) => {
         for (let x = 0; x < result.rows.length; x++) {
-            let phoneNumStrMsg= result.rows[x].doc.phone;
+            let phoneNumStrMsg = result.rows[x].doc.phone;
             phoneNumStrMsg = phoneNumStrMsg.replace(/-/g, "");
             let name = result.rows[x].doc.name;
 
@@ -729,10 +720,10 @@ function Crash() {
             console.log('sendding msg to:', result.rows[x].doc.name);
             getCoordinateAndSendMessage(data); //Send a message to all registred contacts
 
-            
+
         }
 
-    }).catch( (err) => {
+    }).catch((err) => {
         console.log(err);
     });
 }
@@ -750,63 +741,63 @@ function Crash() {
 
 //Send message and get position
 async function getCoordinateAndSendMessage(phoneNumber) {
-    let get = new Promise((res, rej) =>{
-         navigator.geolocation.getCurrentPosition((position) => {
- 
-             var coordinates = {
-                 latitude: position.coords.latitude,
-                 longitude: position.coords.longitude
-             }
-             this.coordinates = coordinates;
-             res(coordinates);
-         }, (err) =>{
-             console.log('error: ', err)
-             res(err)
-         }, { timeout: 30000, maximumAge: 2000, enableHighAccuracy: true });
-    }) 
- 
-    get.then(() =>{
-         let msgCoordinate = this.coordinates
-         
-         let latitude = msgCoordinate.latitude;
-         let longitude = msgCoordinate.longitude;
- 
-         let message = "🚨I had an accident !!!💥 \n Please come help me these are my coordinates: \n 🛰️🛰️Latitude: " + latitude + "\n 🛰️Longitude: " + longitude  + "\n🌐Easy link: https://www.google.com/maps/search/?api=1&query="+ latitude + ","+longitude +"\n This message have been sent automaticly using SafeCrash 🚙"
-         let options= {
-             replaceLineBreaks: true, // true to replace \n by a new line
-                 android: {
-                     intent: 'INTENT'  // send SMS with the native android SMS messaging
-                     //intent: '' // send SMS without opening any other app, require : android.permission.SEND_SMS and android.permission.READ_PHONE_STATE
-                 }
- 
-         };
+    let get = new Promise((res, rej) => {
+        navigator.geolocation.getCurrentPosition((position) => {
+
+            var coordinates = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            }
+            this.coordinates = coordinates;
+            res(coordinates);
+        }, (err) => {
+            console.log('error: ', err)
+            res(err)
+        }, { timeout: 30000, maximumAge: 2000, enableHighAccuracy: true });
+    })
+
+    get.then(() => {
+        let msgCoordinate = this.coordinates
+
+        let latitude = msgCoordinate.latitude;
+        let longitude = msgCoordinate.longitude;
+
+        let message = "🚨I had an accident !!!💥 \n Please come help me these are my coordinates: \n 🛰️🛰️Latitude: " + latitude + "\n 🛰️Longitude: " + longitude + "\n🌐Easy link: https://www.google.com/maps/search/?api=1&query=" + latitude + "," + longitude + "\n This message have been sent automaticly using SafeCrash 🚙"
+        let options = {
+            replaceLineBreaks: true, // true to replace \n by a new line
+            android: {
+                intent: 'INTENT'  // send SMS with the native android SMS messaging
+                //intent: '' // send SMS without opening any other app, require : android.permission.SEND_SMS and android.permission.READ_PHONE_STATE
+            }
+
+        };
 
 
 
 
-         console.log('name:', phoneNumber.name, "phone: ", phoneNumber.phone, "data: ", phoneNumber);
+        console.log('name:', phoneNumber.name, "phone: ", phoneNumber.phone, "data: ", phoneNumber);
 
-         let number = phoneNumber.phone
+        let number = phoneNumber.phone
 
-         let intent = '';
-         let error = (err) => {console.log('Error: ' + err)};
-         sms.send(number, message, intent, ()=>{
-             console.log('SOS SENT ! ')
-             cordova.plugins.notification.local.schedule({
+        let intent = '';
+        let error = (err) => { console.log('Error: ' + err) };
+        sms.send(number, message, intent, () => {
+            console.log('SOS SENT ! ')
+            cordova.plugins.notification.local.schedule({
                 title: 'SOS SENT !',
-                text: 'An SOS have been sent to '+ phoneNumber.name,
+                text: 'An SOS have been sent to ' + phoneNumber.name,
                 foreground: true
             });
-         }, error);
-         
+        }, error);
+
     })
     return await get;
- }
+}
 
 
- async function boundSelected() {
-    let tempID = await getDeviceID();  
-     if (boundStateSwitch) {
+async function boundSelected() {
+    let tempID = await getDeviceID();
+    if (boundStateSwitch) {
         boundStateSwitch = false;
         console.log(boundStateSwitch);
 
@@ -816,17 +807,17 @@ async function getCoordinateAndSendMessage(phoneNumber) {
             'Alert',           // title
             'Nice !'                  // buttonName
         )
-    
-        function alertDismissed1(){
+
+        function alertDismissed1() {
             //do nothing be must be here
         }
         autoconnect()
-     }else{
+    } else {
         boundStateSwitch = true;
         console.log(boundStateSwitch);
-        ble.disconnect(tempID, (suc) =>{
+        ble.disconnect(tempID, (suc) => {
             console.log('disconnected from device: ', suc);
-        }, (err) =>{
+        }, (err) => {
             console.log('error during disco: ', err);
         });
 
@@ -836,9 +827,32 @@ async function getCoordinateAndSendMessage(phoneNumber) {
             'Alert',           // title
             'Nice !'                  // buttonName
         )
-        function alertDismissed2(){
+        function alertDismissed2() {
             //do nothing be must be here
         }
-    
-     }
- }
+
+    }
+}
+
+
+
+
+//dropdown button
+function seeContacts() {
+    document.getElementById("dropdown").classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function (event) {
+    if (!event.target.matches('.dropbtn')) {
+
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
+}

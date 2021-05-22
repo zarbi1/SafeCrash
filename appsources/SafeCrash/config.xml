@@ -33,6 +33,7 @@
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="FadeSplashScreen" value="true" />
     <preference name="FadeSplashScreenDuration" value="1000" />
+    <preference name="ScrollEnabled" value="true" />
     <feature name="Notification">
         <param name="android-package" value="org.apache.cordova.dialogs.Notification" />
     </feature>

@@ -5,9 +5,10 @@
 By Hadrien Casadesus
 -->
 <html>
-    <head>
-        <meta charset="utf-8">
-        <!--
+
+<head>
+    <meta charset="utf-8">
+    <!--
         Customize this policy to fit your own app's needs. For more guidance, see:
             https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
         Some notes:
@@ -16,81 +17,86 @@ By Hadrien Casadesus
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
         -->
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
-        <meta name="color-scheme" content="light dark">
-        <link rel="stylesheet" href="css/index.css">
-        <link rel="stylesheet" href="css/countdown.css">
-        <title>SafeCrash | Home</title>
-    </head>
-    <body onload="onloadJS()">
-        <div id="globalDiv" class="globalDiv">
-            <h1 class="title-Crash-General"><a class="title-Safe">Safe</a>Crash</h1>
-        
-            <div class="subtitle">
-                <p>The little thing that can save your life</p>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport"
+        content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <meta name="color-scheme" content="light dark">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/countdown.css">
+    <title>SafeCrash | Home</title>
+</head>
+
+<body onload="onloadJS()">
+    <div id="globalDiv" class="globalDiv">
+        <h1 class="title-Crash-General"><a class="title-Safe">Safe</a>Crash</h1>
+
+        <div class="subtitle">
+            <p>The little thing that can save your life</p>
+        </div>
+        <div class="boxforbtn">
+            <button class="infobtn" onclick="infonotification()">HELP</button>
+        </div>
+        <br><br><br>
+        <div class="box">
+            <button onclick="addContacts()" class="addbtn">Add Emergency Contacts</button>
+        </div>
+        <br>
+        <div class="em-contact-title">
+            <p id="printtest">Emergency Contacts List:</p>
+        </div>
+        <div class="dropdown">
+            <button onclick="seeContacts()" class="dropbtn">Contact List</button>
+            <div id="dropdown" class="dropdown-content">
             </div>
-            <div class="boxforbtn">
-                <button class="infobtn" onclick="infonotification()">HELP</button>
+        </div>
+        <br>
+        <div id="boudnStaetContainer">
+            <p id="boundState"></p>
+        </div>
+
+        <p>Please activate this switch if you want to bound or re-bound SafeCrash (if you changed your safecrash device
+            please rebound it)</p>
+        <div class="boundSwitch">
+            <div>
+                <p>Bound Switch: </p>
             </div>
-            <br><br><br>
-            <div class="box">
-                <button onclick="addContacts()" class="addbtn">Add Emergency Contacts</button>
-            </div>
-            <br>
-            <div class="em-contact-title">
-                <p id="printtest">Emergency Contacts List:</p>
-            </div>
-            <div class="em-contact-list" id="em-contact-list">
-            </div>
-            <br>
-            <div id="boudnStaetContainer">
-                <p id="boundState"></p>
-            </div>
-            
-            <p>Please activate this switch if you want to bound or re-bound SafeCrash</p>
-            <div class="boundSwitch">
+            <div>
                 <label class="switch">
-                    <input type="checkbox" id="boudnSwitch" name="boudnSwitch" value="false" onclick="boundSelected()" >
+                    <input type="checkbox" id="boudnSwitch" name="boudnSwitch" value="false" onclick="boundSelected()">
                     <span class="slider round"></span>
                 </label>
             </div>
-            <div class="bound" id="boundSafeCrashContainer">
-                <button onclick="Bound()" class="bound-btn" id="bound-btn">Bound SafeCrash</button>
-            </div>
-            <div class="cachebox">
-                <p>If you changed your SafeCrash Device please delete the intrnal cash before doing a bound/rebound</p>
-                <br>
-                <button onclick="clearDB()" class="cacheb">Clear Cache</button>
-            </div>
 
-        </div>  
-        
-        <!--
+        </div>
+        <div class="bound" id="boundSafeCrashContainer">
+            <button onclick="Bound()" class="bound-btn" id="bound-btn">Bound SafeCrash</button>
+        </div>
+
+    </div>
+
+    <!--
             Alarm mode
         -->
-        <div id="alarm" class="alarmContainer">
-            <h1>SafeCrash</h1>
-            <div>
-                <h2>We detected an accident, are you ok ?</h2>
-            </div>
-            <div class="countdown" id="countdown">
-            </div>
-            <br><br>
-            <div class="buttons1" >
-                <button class="callNow" id="callNow">CONTACT MY EMERGENCY CONTACTS</button>
-                <br><br>
-                
-            </div>
-            <div class="buttons2">
-                <button class="doNotCall" id="doNotCall">I AM OK DONT SEND AN SMS</button>
-            </div>
+    <div id="alarm" class="alarmContainer">
+        <h1>SafeCrash</h1>
+        <div>
+            <h2>We detected an accident, are you ok ?</h2>
         </div>
-       
-    
+        <div class="countdown" id="countdown">
+        </div>
+        <br><br>
+        <div class="buttons1">
+            <button class="callNow" id="callNow">CONTACT MY EMERGENCY CONTACTS</button>
+            <br><br>
+
+        </div>
+        <div class="buttons2">
+            <button class="doNotCall" id="doNotCall">I AM OK DONT SEND AN SMS</button>
+        </div>
+    </div>
 
 
 
@@ -103,10 +109,15 @@ By Hadrien Casadesus
 
 
 
-        <footer class="footer"><p>Made in 🇫🇷 with ❤️ <br>By Hadrien Casadesus</p></footer>
-        <script src="cordova.js"></script>
-        <script src="js/db/pouchdb.js"></script>
-        <script src="js/db/pouchdb.cordova-sqlite.js"></script>
-        <script src="js/index.js"></script>
-    </body>
+
+
+    <div class="footer">
+        <p>Made in 🇫🇷 with ❤️ <br>By Hadrien Casadesus</p>
+    </div>
+    <script src="cordova.js"></script>
+    <script src="js/db/pouchdb.js"></script>
+    <script src="js/db/pouchdb.cordova-sqlite.js"></script>
+    <script src="js/index.js"></script>
+</body>
+
 </html>
