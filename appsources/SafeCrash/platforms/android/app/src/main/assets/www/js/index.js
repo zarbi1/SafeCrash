@@ -15,7 +15,7 @@ let doNotCall = document.getElementById('doNotCall').addEventListener('click', (
     doNotCall = true;
 });
 
-let dropdown = document.getElementById('dropdown');
+let dropdown = document.getElementById('contact-list-ul');
 
 let switchBound = document.getElementById('boudnSwitch');
 
@@ -352,8 +352,9 @@ function bleEn() {
                     boundBtn.style.display = "initial";
 
                 } else {
+                    boundState.innerHTML = "Please Bound SafeCrash before using the app."
                     boundBtn.style.display = "initial";
-                    boundState = false; //Device is not bounded so we are activating the checkbox
+                    boundStateSwitch = false; //Device is not bounded so we are activating the checkbox
                     switchBound.checked = true;
                 }
 
@@ -402,7 +403,7 @@ async function Bound() {
                 })
 
                 navigator.notification.alert(
-                    "SafeCrash is now Bounded !",  // message
+                    "SafeCrash is now Bounded ! Please stop your SafeCrash device BEFORE closing this message !",  // message
                     alertDismissed,         // callback
                     'SafeCrash Bounded',           // title
                     'Ok !'                  // buttonName
@@ -442,9 +443,8 @@ function onloadJS() {
         }).then(function (result) {
             console.log(result);
             for (let e = 0; e < result.rows.length; e++) {
-                let asset = document.createElement('a');
+                let list = document.createElement('li');
                 let deleteButton = document.createElement('button');
-                let hrline = document.createElement('hr')
 
                 //Clase Names
                 deleteButton.className = "button";
@@ -455,12 +455,11 @@ function onloadJS() {
 
 
                 //Inner HTML
-                asset.innerHTML = "<strong>" + result.rows[e].doc.name + "</strong>";
+                list.innerHTML = "<strong>" + result.rows[e].doc.name + "</strong>";
                 deleteButton.innerHTML = 'Delete';
 
-                dropdown.appendChild(asset);
+                dropdown.appendChild(list);
                 dropdown.appendChild(deleteButton);
-                dropdown.appendChild(hrline);
 
             }
         }).catch(function (err) {
@@ -831,28 +830,5 @@ async function boundSelected() {
             //do nothing be must be here
         }
 
-    }
-}
-
-
-
-
-//dropdown button
-function seeContacts() {
-    document.getElementById("dropdown").classList.toggle("show");
-}
-
-// Close the dropdown if the user clicks outside of it
-window.onclick = function (event) {
-    if (!event.target.matches('.dropbtn')) {
-
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        var i;
-        for (i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-            }
-        }
     }
 }
