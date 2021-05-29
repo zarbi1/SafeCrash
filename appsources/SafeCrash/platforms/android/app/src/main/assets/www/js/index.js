@@ -596,7 +596,7 @@ function alarm() {
 
 
     function startTimer() {
-        sound.media.play({ numberOfLoops: 2 }) //looping for 15 sec
+        sound.media.play({ numberOfLoops: 9999 }) //looping for 15 sec
         timerInterval = setInterval(() => {
             timePassed = timePassed += 1;
             timeLeft = TIME_LIMIT - timePassed;
@@ -710,6 +710,7 @@ function Crash() {
         for (let x = 0; x < result.rows.length; x++) {
             let phoneNumStrMsg = result.rows[x].doc.phone;
             phoneNumStrMsg = phoneNumStrMsg.replace(/-/g, "");
+            phoneNumStrMsg = phoneNumStrMsg.replace(/+33/g, "");
             let name = result.rows[x].doc.name;
 
             let data = {

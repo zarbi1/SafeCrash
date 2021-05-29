@@ -442,7 +442,7 @@ function onloadJS() {
             attachments: true
         }).then(function (result) {
             console.log(result);
-            for (let e = 0; e < result.rows.length; e++) {
+            for (let e = 0; e < result.rows.length; e++) { //doing actions for each contact who is in the list
                 let list = document.createElement('li');
                 let deleteButton = document.createElement('button');
 
@@ -504,7 +504,6 @@ function infonotification() {
 
 
 
-//will be added soon
 function alarm() {
     let sound = {
         track: {
@@ -596,7 +595,7 @@ function alarm() {
 
 
     function startTimer() {
-        sound.media.play({ numberOfLoops: 2 }) //looping for 15 sec
+        sound.media.play({ numberOfLoops: 9999 }) //looping 
         timerInterval = setInterval(() => {
             timePassed = timePassed += 1;
             timeLeft = TIME_LIMIT - timePassed;
@@ -620,7 +619,7 @@ function alarm() {
                 alarmdiv.style.display = "none"//hidding the alarm
             }
 
-            if (timeLeft === 0) {
+            if (timeLeft === 0) { //time left so we need to call the em conacts and stop the sound
                 sound.media.stop()
                 onTimesUp();
 
@@ -630,7 +629,7 @@ function alarm() {
 
 
 
-    function onTimesUp() {
+    function onTimesUp() { // Whene the timer is gone
         clearInterval(timerInterval);
         console.log('time up')
 
@@ -710,6 +709,7 @@ function Crash() {
         for (let x = 0; x < result.rows.length; x++) {
             let phoneNumStrMsg = result.rows[x].doc.phone;
             phoneNumStrMsg = phoneNumStrMsg.replace(/-/g, "");
+            phoneNumStrMsg = phoneNumStrMsg.replace(/+33/g, "");
             let name = result.rows[x].doc.name;
 
             let data = {
@@ -756,7 +756,7 @@ async function getCoordinateAndSendMessage(phoneNumber) {
     })
 
     get.then(() => {
-        let msgCoordinate = this.coordinates
+        let msgCoordinate = this.coordinates //getting the coordinates
 
         let latitude = msgCoordinate.latitude;
         let longitude = msgCoordinate.longitude;
@@ -780,7 +780,7 @@ async function getCoordinateAndSendMessage(phoneNumber) {
 
         let intent = '';
         let error = (err) => { console.log('Error: ' + err) };
-        sms.send(number, message, intent, () => {
+        sms.send(number, message, intent, () => {  //sending the sms
             console.log('SOS SENT ! ')
             cordova.plugins.notification.local.schedule({
                 title: 'SOS SENT !',
@@ -794,9 +794,9 @@ async function getCoordinateAndSendMessage(phoneNumber) {
 }
 
 
-async function boundSelected() {
+async function boundSelected() {  //launch the bound function
     let tempID = await getDeviceID();
-    if (boundStateSwitch) {
+    if (boundStateSwitch) { //checking if the switch is on
         boundStateSwitch = false;
         console.log(boundStateSwitch);
 
@@ -810,11 +810,11 @@ async function boundSelected() {
         function alertDismissed1() {
             //do nothing be must be here
         }
-        autoconnect()
+        autoconnect()  //enabeling autoconnect, SafeCrash is bounded
     } else {
         boundStateSwitch = true;
         console.log(boundStateSwitch);
-        ble.disconnect(tempID, (suc) => {
+        ble.disconnect(tempID, (suc) => {  //manually disconnect safecrash to avoid bugs
             console.log('disconnected from device: ', suc);
         }, (err) => {
             console.log('error during disco: ', err);
